@@ -12,7 +12,10 @@ const cors = corsMiddleware(Cors({ methods: ['POST'] }));
 
 const prisma = new PrismaClient();
 
-const handle = async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handle(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   await cors(req, res);
 
   if (req.method !== 'POST') {
@@ -87,6 +90,4 @@ const handle = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = UserRes.handle(newUser);
 
   return res.status(201).json(user);
-};
-
-export default handle;
+}
