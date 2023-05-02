@@ -9,4 +9,5 @@ export const StyledLabel = styled.label`
   padding-left: 0.2rem;
   transition: 0.2s ease-out;
   color: var(--color-primary);
+  opacity: 0.4;
 `;

@@ -1,12 +1,13 @@
 import { LoadingContext } from '@/contexts/loading.context';
 import { UserContext } from '@/contexts/user.context';
-import { ICreateUser } from '@/interfaces/session.interfaces';
+import { ILogin } from '@/interfaces/session.interfaces';
 import { StyledFormError } from '@/styles/formError.styles';
 import { StyledInput } from '@/styles/input.styles';
 import { StyledLabel } from '@/styles/label.styles';
 import { StyledSession } from '@/styles/session.styles';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -14,10 +15,12 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 
-const RegisterPage = () => {
+const LoginPage = () => {
   const loadingContext = React.useContext(LoadingContext);
 
   const userContext = React.useContext(UserContext);
+
+  const [visiblePassword, setVisiblePassword] = React.useState<boolean>(false);
 
   const router = useRouter();
 
@@ -25,27 +28,27 @@ const RegisterPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ICreateUser>({
+  } = useForm<ILogin>({
     resolver: yupResolver(
       yup.object().shape({
-        name: yup.string().required('nome é obrigatório.'),
         email: yup
           .string()
           .email('deve ser um e-mail válido')
           .required('e-mail é obrigatório.'),
+        password: yup.string().required('senha é obrigatório.'),
       })
     ),
   });
 
-  const handle = async ({ name, email }: ICreateUser) => {
+  const handle = async ({ email, password }: ILogin) => {
     loadingContext.setLoading(true);
 
     try {
-      await toast.promise(
-        axios.post('/api/users/create', { name, email }),
+      const { data } = await toast.promise(
+        axios.post('/api/login', { email, password }),
         {
           pending: 'Aguardando...',
-          success: 'Cadastro criado com sucesso.',
+          success: 'Login efetuado com sucesso.',
         },
         {
           className: 'my-toast-sucess',
@@ -53,15 +56,23 @@ const RegisterPage = () => {
         }
       );
 
-      router.push('/login');
-    } catch ({ response }: any) {
-      toast.error(response.data.message, {
+      userContext.setUser(data.user);
+
+      localStorage.setItem('token', data.token);
+
+      router.push('/');
+    } catch (e: any) {
+      toast.error(e.response.data.message, {
         autoClose: 5000,
         className: 'my-toast-error',
       });
     } finally {
       loadingContext.setLoading(false);
     }
+  };
+
+  const changeVisiblePassword = (): void => {
+    visiblePassword ? setVisiblePassword(false) : setVisiblePassword(true);
   };
 
   React.useEffect(() => {
@@ -72,21 +83,7 @@ const RegisterPage = () => {
     <>
       <StyledSession>
         <form onSubmit={handleSubmit(handle)}>
-          <h2>Cadastrar-se</h2>
-          <div style={{ marginBottom: '20px' }}>
-            <StyledInput
-              {...register('name')}
-              id="name"
-              name="name"
-              type="text"
-              placeholder=" "
-            />
-            <StyledLabel htmlFor="name">Nome</StyledLabel>
-            <StyledFormError>
-              {errors.name && errors.name.message}
-            </StyledFormError>
-          </div>
-
+          <h2 style={{ width: '65px' }}>Entrar</h2>
           <div style={{ marginBottom: '20px' }}>
             <StyledInput
               {...register('email')}
@@ -101,10 +98,36 @@ const RegisterPage = () => {
             </StyledFormError>
           </div>
 
-          <Link href="/login">Já tem um cadastro? Entrar</Link>
+          <div style={{ marginBottom: '20px' }}>
+            <StyledInput
+              {...register('password')}
+              id="password"
+              name="password"
+              type={visiblePassword ? 'text' : 'password'}
+              placeholder=" "
+            />
+            <StyledLabel htmlFor="password">Senha</StyledLabel>
+            <StyledFormError>
+              {errors.password && errors.password.message}
+            </StyledFormError>
+            <span onClick={() => changeVisiblePassword()}>
+              <Image
+                src={
+                  visiblePassword
+                    ? '/image/invisible.png'
+                    : '/image/visible.png'
+                }
+                alt="Visible password"
+                width={20}
+                height={20}
+              />
+            </span>
+          </div>
+
+          <Link href="/register">Não tem um cadastro? Cadastrar-se</Link>
 
           <div>
-            <button type="submit">Cadastrar</button>
+            <button type="submit">Entrar</button>
           </div>
         </form>
       </StyledSession>
@@ -112,4 +135,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

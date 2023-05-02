@@ -89,6 +89,11 @@ export const StyledHeader = styled.header`
 
         > p {
           font-size: 1.5rem;
+          color: var(--color-grey-3);
+
+          :hover {
+            color: black;
+          }
         }
       }
     }

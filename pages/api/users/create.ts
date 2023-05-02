@@ -1,3 +1,4 @@
+import { ICreateUser } from '@/interfaces/session.interfaces';
 import { UserRes } from '@/mappers/users';
 import { corsMiddleware } from '@/middlewares/cors.middleware';
 import { PrismaClient } from '@prisma/client';
@@ -39,7 +40,7 @@ export default async function handle(
     return res.status(400).json({ message });
   }
 
-  const { name, email } = req.body;
+  const { name, email }: ICreateUser = req.body;
 
   const emailFound = await prisma.user.findFirst({
     where: { email },

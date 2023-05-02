@@ -66,9 +66,25 @@ const StyledGlobal = createGlobalStyle`
 
         --color-whiteFixed: #FFFFFF;
 
-        --color-primary: rgb(25, 118, 210);
+        /* --color-primary: rgb(25, 118, 210); */
+        --color-primary: #00aa2d;
 
-        --color-secundary: #f2f8ff;
+        /* --color-secundary: #f2f8ff; */
+        --color-secundary: #f2fff3;
+
+        .my-toast {
+            margin-top: 2rem;
+            font-size: 1.6rem;
+            padding: 2rem;
+        }
+
+        .my-toast-sucess {
+            border: .05rem solid var(--color-fourth);
+        }
+
+        .my-toast-error {
+            border: .05rem solid var(--toastify-color-error);
+        }
     }
 
     body {
