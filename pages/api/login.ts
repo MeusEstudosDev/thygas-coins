@@ -42,6 +42,10 @@ export default async function handle(
     return res.status(401).json({ message: 'Email ou senha invalida!' });
   }
 
+  if (userFound.soft_delete) {
+    return res.status(404).json({ message: 'Usuário não encontrado' });
+  }
+
   const passwordMatch = await bcrypt.compare(password, userFound.password);
 
   if (!passwordMatch) {

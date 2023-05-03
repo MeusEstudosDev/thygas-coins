@@ -27,6 +27,10 @@ export default withTokenMiddleware(
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
+    if (userFound.soft_delete) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
     const user = UserRes.handle(userFound);
 
     return res.status(200).json(user);

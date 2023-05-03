@@ -37,7 +37,10 @@ export default withTokenMiddleware(
 
     const email = userFound.email;
 
-    await prisma.user.delete({ where: { id: id?.toString() } });
+    await prisma.user.update({
+      where: { id: id?.toString() },
+      data: { soft_delete: true },
+    });
 
     const transporter = nodemailer.createTransport({
       host: process.env.SMTPHOST,

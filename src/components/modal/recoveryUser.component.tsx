@@ -1,6 +1,6 @@
 import { LoadingContext } from '@/contexts/loading.context';
 import { UserContext } from '@/contexts/user.context';
-import { IUserEdit } from '@/interfaces/users.interfaces';
+import { IUserRecovery } from '@/interfaces/users.interfaces';
 import { StyledFormError } from '@/styles/formError.styles';
 import { StyledInput } from '@/styles/input.styles';
 import { StyledLabel } from '@/styles/label.styles';
@@ -9,69 +9,39 @@ import { TitleH2 } from '@/styles/typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CancelIcon from '@mui/icons-material/Cancel';
 import axios from 'axios';
-import Image from 'next/image';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 
-const EditUserModal = () => {
+const RecoveryModal = () => {
   const loadingContext = React.useContext(LoadingContext);
 
   const userContext = React.useContext(UserContext);
 
   const modalRef = React.useRef<HTMLDivElement>(null);
 
-  const [visiblePassword, setVisiblePassword] = React.useState<boolean>(false);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IUserEdit>({
+  } = useForm<IUserRecovery>({
     resolver: yupResolver(
       yup.object().shape({
-        name: yup.string().optional(),
-        email: yup.string().email('deve ser um e-mail válido').optional(),
-        password: yup.string().optional(),
+        email: yup.string().email('deve ser um e-mail válido').required(),
       })
     ),
   });
 
-  const changeVisiblePassword = (): void => {
-    visiblePassword ? setVisiblePassword(false) : setVisiblePassword(true);
-  };
-
-  const handle = async (data: IUserEdit): Promise<void> => {
+  const handle = async (data: IUserRecovery) => {
     loadingContext.setLoading(true);
-    
-    const token: string | null = localStorage.getItem('token');
-
-    if (!token) return userContext.userLogout();
-
-    for (const key in data) {
-      if (data.hasOwnProperty(key) && data[key] === '') {
-        delete data[key];
-      }
-    }
-
-    if (JSON.stringify(data) === '{}') {
-      toast.error('Para editar você precisa preencher algum campo.', {
-        autoClose: 5000,
-        className: 'my-toast-error',
-      });
-
-      return;
-    }
 
     try {
-      const res = await toast.promise(
-        axios.patch(`/api/users/edit/${userContext.user?.id}`, data, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
+      await toast.promise(
+        axios.patch(`/api/users/recovery`, data),
         {
           pending: 'Aguardando...',
-          success: 'Usuário editado com sucesso.',
+          success: 'Nova senha enviada por email.',
         },
         {
           className: 'my-toast-sucess',
@@ -79,9 +49,7 @@ const EditUserModal = () => {
         }
       );
 
-      userContext.setUser(res.data);
-
-      userContext.setModalUserEdit(false);
+      userContext.setModalUserRecovery(false);
     } catch (e: any) {
       toast.error(e.response.data.message, {
         autoClose: 5000,
@@ -96,7 +64,7 @@ const EditUserModal = () => {
     if (event.key === 'Enter') event.preventDefault();
     if (event.key === 'Escape') {
       event.preventDefault();
-      userContext.setModalUserEdit(false);
+      userContext.setModalUserRecovery(false);
     }
   };
 
@@ -114,7 +82,7 @@ const EditUserModal = () => {
         modalRef.current &&
         !(modalRef.current as HTMLElement).contains(event.target as HTMLElement)
       ) {
-        userContext.setModalUserEdit(false);
+        userContext.setModalUserRecovery(false);
       }
     };
 
@@ -134,24 +102,10 @@ const EditUserModal = () => {
             color="disabled"
             onClick={(event) => {
               event.preventDefault();
-              userContext.setModalUserEdit(false);
+              userContext.setModalUserRecovery(false);
             }}
           />
-          <TitleH2>Editar</TitleH2>
-          <div>
-            <StyledInput
-              {...register('name')}
-              id="name"
-              name="name"
-              type="text"
-              placeholder=" "
-            />
-            <StyledLabel>Nome</StyledLabel>
-            <StyledFormError>
-              {errors.name && errors.name.message}
-            </StyledFormError>
-          </div>
-
+          <TitleH2 style={{ width: '240px' }}>Esqueceu sua senha?</TitleH2>
           <div>
             <StyledInput
               {...register('email')}
@@ -167,33 +121,7 @@ const EditUserModal = () => {
           </div>
 
           <div>
-            <StyledInput
-              {...register('password')}
-              id="password"
-              name="password"
-              type={visiblePassword ? 'text' : 'password'}
-              placeholder=" "
-            />
-            <StyledLabel>Senha</StyledLabel>
-            <StyledFormError>
-              {errors.password && errors.password.message}
-            </StyledFormError>
-            <span onClick={() => changeVisiblePassword()}>
-              <Image
-                src={
-                  visiblePassword
-                    ? '/image/invisible.png'
-                    : '/image/visible.png'
-                }
-                alt="Visible password"
-                width={20}
-                height={20}
-              />
-            </span>
-          </div>
-
-          <div>
-            <button type="submit">Editar</button>
+            <button type="submit">Recuperar</button>
           </div>
         </form>
       </section>
@@ -201,4 +129,4 @@ const EditUserModal = () => {
   );
 };
 
-export default EditUserModal;
+export default RecoveryModal;

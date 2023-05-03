@@ -1,10 +1,11 @@
+import RecoveryModal from '@/components/modal/recoveryUser.component';
 import { LoadingContext } from '@/contexts/loading.context';
 import { UserContext } from '@/contexts/user.context';
 import { ILogin } from '@/interfaces/session.interfaces';
 import { StyledFormError } from '@/styles/formError.styles';
 import { StyledInput } from '@/styles/input.styles';
 import { StyledLabel } from '@/styles/label.styles';
-import { StyledSession } from '@/styles/session.styles';
+import { StyledRecovery, StyledSession } from '@/styles/session.styles';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import Image from 'next/image';
@@ -52,7 +53,7 @@ const LoginPage = () => {
         },
         {
           className: 'my-toast-sucess',
-          autoClose: 10000,
+          autoClose: 5000,
         }
       );
 
@@ -81,6 +82,7 @@ const LoginPage = () => {
 
   return (
     <>
+      {userContext.modalUserRecovery && <RecoveryModal />}
       <StyledSession>
         <form onSubmit={handleSubmit(handle)}>
           <h2 style={{ width: '65px' }}>Entrar</h2>
@@ -123,6 +125,14 @@ const LoginPage = () => {
               />
             </span>
           </div>
+
+          <StyledRecovery
+            onClick={() => {
+              userContext.setModalUserRecovery(true);
+            }}
+          >
+            Esqueceu sua senha?
+          </StyledRecovery>
 
           <Link href="/register">Não tem um cadastro? Cadastrar-se</Link>
 

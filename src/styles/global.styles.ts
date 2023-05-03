@@ -91,6 +91,7 @@ const StyledGlobal = createGlobalStyle`
         font-family: var(--font-family-1);  
         background-color: var(--color-grey-10);
         min-width: 42.5rem;
+        height: 100%;
     }
     
     .container {

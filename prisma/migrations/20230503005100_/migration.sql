@@ -5,7 +5,8 @@ CREATE TABLE "user" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "registered_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "isAdmin" BOOLEAN NOT NULL DEFAULT false
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "soft_delete" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateIndex

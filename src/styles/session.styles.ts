@@ -3,6 +3,11 @@ import styled from 'styled-components';
 export const StyledSession = styled.main`
   margin: 0 auto;
   padding: 4rem 0;
+  min-height: calc(100vh - (285px + 335px));
+
+  @media (min-width: 1024px) {
+    min-height: calc(100vh - (150px + 175px));
+  }
 
   > form {
     display: flex;
@@ -71,5 +76,18 @@ export const StyledSession = styled.main`
         cursor: pointer;
       }
     }
+  }
+`;
+
+export const StyledRecovery = styled.p`
+  text-align: end;
+  padding-right: 1rem;
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: var(--color-grey-3);
+
+  :hover {
+    color: black;
+    cursor: pointer;
   }
 `;

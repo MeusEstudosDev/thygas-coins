@@ -10,4 +10,9 @@ export interface IUserEdit {
   name: string;
   email: string;
   password: string;
+  [key: string]: any;
+}
+
+export interface IUserRecovery {
+  email: string;
 }

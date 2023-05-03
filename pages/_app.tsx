@@ -1,7 +1,6 @@
 import FooterComponent from '@/components/footer.component';
 import HeaderComponent from '@/components/header.component';
 import LoadingComponent from '@/components/loading.component';
-import EditUserModal from '@/components/modal/editUser.component';
 import LoadingProvider, { LoadingContext } from '@/contexts/loading.context';
 import UserProvider from '@/contexts/user.context';
 import StyledGlobal from '@/styles/global.styles';
@@ -32,7 +31,6 @@ export default function App({ Component, pageProps }: AppProps) {
           />
           <StyledGlobal />
           {loadingContext.loading && <LoadingComponent />}
-          <EditUserModal />
           <HeaderComponent />
           <Component {...pageProps} />
           <FooterComponent />

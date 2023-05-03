@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const StyledFooter = styled.footer`
   width: 100%;
   border-top: 0.2rem solid var(--color-grey-6);
+  background-color: var(--color-grey-10);
 
   > div {
     display: flex;

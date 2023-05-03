@@ -14,6 +14,7 @@ model User {
   password      String
   registered_at DateTime @default(now())
   isAdmin       Boolean  @default(false)
+  soft_delete   Boolean  @default(false)
 
   @@map("user")
 }

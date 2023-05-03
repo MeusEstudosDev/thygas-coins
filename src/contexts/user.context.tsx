@@ -6,8 +6,19 @@ import React from 'react';
 import { LoadingContext } from './loading.context';
 
 interface IUserContext {
+  userLogout: () => void;
+
   user: IUserRes | null;
   setUser: React.Dispatch<React.SetStateAction<IUserRes | null>>;
+
+  modalUserEdit: boolean;
+  setModalUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalUserDelete: boolean;
+  setModalUserDelete: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalUserRecovery: boolean;
+  setModalUserRecovery: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = React.createContext({} as IUserContext);
@@ -16,6 +27,13 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   const loadingContext = React.useContext(LoadingContext);
 
   const [user, setUser] = React.useState<IUserRes | null>(null);
+
+  const [modalUserEdit, setModalUserEdit] = React.useState<boolean>(false);
+
+  const [modalUserDelete, setModalUserDelete] = React.useState<boolean>(false);
+
+  const [modalUserRecovery, setModalUserRecovery] =
+    React.useState<boolean>(false);
 
   const router = useRouter();
 
@@ -56,7 +74,19 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider
+      value={{
+        userLogout,
+        user,
+        setUser,
+        modalUserEdit,
+        setModalUserEdit,
+        modalUserDelete,
+        setModalUserDelete,
+        modalUserRecovery,
+        setModalUserRecovery,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

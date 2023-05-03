@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
 export const StyledAccount = styled.main`
+  min-height: calc(100vh - (285px + 335px));
+
+  @media (min-width: 1024px) {
+    min-height: calc(100vh - (150px + 175px));
+  }
+
   > section {
     display: flex;
     flex-direction: column;
@@ -52,5 +58,18 @@ export const StyledAccount = styled.main`
         border: 0.1rem solid var(--color-primary);
       }
     }
+  }
+`;
+
+export const StyledExcluir = styled.p`
+  background-color: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-grey-0);
+  letter-spacing: 0.1rem;
+
+  :hover {
+    color: red;
+    cursor: pointer;
   }
 `;

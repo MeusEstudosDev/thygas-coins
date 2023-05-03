@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
 export const StyledHome = styled.main`
+  min-height: calc(100vh - (285px + 335px));
+
+  @media (min-width: 1024px) {
+    min-height: calc(100vh - (150px + 175px));
+  }
+
   > ul {
     margin: 0 auto;
     max-width: 110rem;
