@@ -13,4 +13,5 @@ export interface IProductReq {
   description: string;
   stock: number;
   image?: string;
+  [key: string]: any;
 }

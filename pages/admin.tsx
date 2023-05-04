@@ -1,5 +1,7 @@
 import CreateProductModal from '@/components/modal/createProduct.component';
+import DeleteProductModal from '@/components/modal/deleteProduct.component';
 import DeleteUserModal from '@/components/modal/deleteUser.component';
+import EditProductModal from '@/components/modal/editProduct.component';
 import EditUserModal from '@/components/modal/editUser.component';
 import { UserContext } from '@/contexts/user.context';
 import { StyledAdmin } from '@/styles/admin.styles';
@@ -27,8 +29,8 @@ const AdminPage = () => {
       {userContext.modalUserEdit && <EditUserModal />}
       {userContext.modalUserDelete && <DeleteUserModal />}
       {userContext.modalProductCreate && <CreateProductModal />}
-      {userContext.modalProductEdit}
-      {userContext.modalProductDelete}
+      {userContext.modalProductEdit && <EditProductModal />}
+      {userContext.modalProductDelete && <DeleteProductModal />}
       <StyledAdmin>
         <section>
           <h2 style={{ width: '110px' }}>Minha conta</h2>
@@ -68,7 +70,7 @@ const AdminPage = () => {
           <button
             onClick={(event) => {
               event.preventDefault();
-              userContext.setModalUserEdit(true);
+              userContext.setModalProductCreate(true);
             }}
           >
             Adicionar
@@ -99,12 +101,20 @@ const AdminPage = () => {
                     onClick={(event) => {
                       event.preventDefault();
                       userContext.setProductInfo(el);
-                      userContext.setModalProductCreate(true);
+                      userContext.setModalProductEdit(true);
                     }}
                   >
                     Editar
                   </button>
-                  <button>Deletar</button>
+                  <button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      userContext.setProductInfo(el);
+                      userContext.setModalProductDelete(true);
+                    }}
+                  >
+                    Deletar
+                  </button>
                 </div>
               </li>
             ))}

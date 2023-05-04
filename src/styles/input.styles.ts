@@ -17,6 +17,7 @@ export const StyledInput = styled.input`
     top: -1.8rem;
     left: 0.2rem;
     opacity: 1;
+    color: var(--color-primary);
   }
 
   &:not(:placeholder-shown) + label {

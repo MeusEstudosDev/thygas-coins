@@ -67,6 +67,7 @@ export const StyledAdmin = styled.main`
       > li {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: 0.6rem;
         max-width: 180px;
         border: 0.1rem solid var(--color-primary);

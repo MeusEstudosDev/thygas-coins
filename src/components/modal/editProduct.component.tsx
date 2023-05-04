@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 
-const CreateProductModal = () => {
+const EditProductModal = () => {
   const modalRef = React.useRef<HTMLDivElement>(null);
 
   const userContext = React.useContext(UserContext);
@@ -28,10 +28,10 @@ const CreateProductModal = () => {
   } = useForm<IProductReq>({
     resolver: yupResolver(
       yup.object().shape({
-        name: yup.string().required(),
-        price: yup.number().required(),
-        description: yup.string().required(),
-        stock: yup.number().required(),
+        name: yup.string().optional(),
+        price: yup.number().optional(),
+        description: yup.string().optional(),
+        stock: yup.number().optional(),
         image: yup.string().optional(),
       })
     ),
@@ -52,12 +52,12 @@ const CreateProductModal = () => {
       }
 
       const res = await toast.promise(
-        axios.post('/api/products/create', data, {
+        axios.patch(`/api/products/edit/${userContext.productInfo?.id}`, data, {
           headers: { Authorization: 'Bearer ' + token },
         }),
         {
           pending: 'Aguardando...',
-          success: 'Produto cadastrado com sucesso.',
+          success: 'Produto editado com sucesso.',
         },
         {
           className: 'my-toast-sucess',
@@ -65,9 +65,13 @@ const CreateProductModal = () => {
         }
       );
 
-      userContext.setProducts([res.data, ...userContext.products]);
+      const filter = userContext.products.filter(
+        (el) => el.id !== userContext.productInfo?.id
+      );
 
-      userContext.setModalProductCreate(false);
+      userContext.setProducts([res.data, ...filter]);
+
+      userContext.setModalProductEdit(false);
     } catch ({ response }: any) {
       toast.error(response.data.message, {
         autoClose: 5000,
@@ -82,7 +86,7 @@ const CreateProductModal = () => {
     if (event.key === 'Enter') event.preventDefault();
     if (event.key === 'Escape') {
       event.preventDefault();
-      userContext.setModalProductCreate(false);
+      userContext.setModalProductEdit(false);
     }
   };
 
@@ -100,7 +104,7 @@ const CreateProductModal = () => {
         modalRef.current &&
         !(modalRef.current as HTMLElement).contains(event.target as HTMLElement)
       ) {
-        userContext.setModalProductCreate(false);
+        userContext.setModalProductEdit(false);
       }
     };
 
@@ -120,10 +124,10 @@ const CreateProductModal = () => {
             color="disabled"
             onClick={(event) => {
               event.preventDefault();
-              userContext.setModalProductCreate(false);
+              userContext.setModalProductEdit(false);
             }}
           />
-          <TitleH2 style={{ width: '150px' }}>Novo produto</TitleH2>
+          <TitleH2 style={{ width: '170px' }}>Editar produto</TitleH2>
           <div>
             <StyledInput
               {...register('name')}
@@ -131,6 +135,13 @@ const CreateProductModal = () => {
               name="name"
               type="text"
               placeholder=" "
+              value={userContext.productInfo?.name}
+              onChange={(event) => {
+                userContext.setProductInfo({
+                  ...userContext.productInfo!,
+                  name: event.target.value,
+                });
+              }}
             />
             <StyledLabel>Nome</StyledLabel>
             <StyledFormError>
@@ -145,6 +156,13 @@ const CreateProductModal = () => {
               name="price"
               type="number"
               placeholder=" "
+              value={userContext.productInfo?.price}
+              onChange={(event) => {
+                userContext.setProductInfo({
+                  ...userContext.productInfo!,
+                  price: Number(event.target.value),
+                });
+              }}
             />
             <StyledLabel>Preço</StyledLabel>
             <StyledFormError>
@@ -159,6 +177,13 @@ const CreateProductModal = () => {
               name="description"
               type="text"
               placeholder=" "
+              value={userContext.productInfo?.description}
+              onChange={(event) => {
+                userContext.setProductInfo({
+                  ...userContext.productInfo!,
+                  description: event.target.value,
+                });
+              }}
             />
             <StyledLabel>Descrição</StyledLabel>
             <StyledFormError>
@@ -171,8 +196,15 @@ const CreateProductModal = () => {
               {...register('stock')}
               id="stock"
               name="stock"
-              type="number"
+              type="text"
               placeholder=" "
+              value={userContext.productInfo?.stock}
+              onChange={(event) => {
+                userContext.setProductInfo({
+                  ...userContext.productInfo!,
+                  stock: Number(event.target.value),
+                });
+              }}
             />
             <StyledLabel>Estoque</StyledLabel>
             <StyledFormError>
@@ -187,6 +219,13 @@ const CreateProductModal = () => {
               name="image"
               type="text"
               placeholder=" "
+              value={userContext.productInfo?.image}
+              onChange={(event) => {
+                userContext.setProductInfo({
+                  ...userContext.productInfo!,
+                  image: event.target.value,
+                });
+              }}
             />
             <StyledLabel>Imagem</StyledLabel>
             <StyledFormError>
@@ -195,7 +234,7 @@ const CreateProductModal = () => {
           </div>
 
           <div>
-            <button type="submit">Adicionar</button>
+            <button type="submit">Editar</button>
           </div>
         </form>
       </section>
@@ -203,4 +242,4 @@ const CreateProductModal = () => {
   );
 };
 
-export default CreateProductModal;
+export default EditProductModal;
