@@ -18,3 +18,15 @@ model User {
 
   @@map("user")
 }
+
+model Product {
+  id          String  @id
+  name        String
+  price       Decimal
+  description String
+  stock       Decimal @default(0)
+  image       String  @default("/image/imagenotfound.png")
+
+  @@map("product")
+}
+ 

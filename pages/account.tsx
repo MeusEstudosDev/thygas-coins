@@ -25,7 +25,12 @@ const AccountPage = () => {
             </p>
             <p>
               <strong>Cadastro: </strong>
-              {userContext.user?.registered_at.toString()}
+              {userContext.user?.registered_at
+                .toString()
+                .split('T')[0]
+                .split('-')
+                .reverse()
+                .join('/')}
             </p>
           </div>
 

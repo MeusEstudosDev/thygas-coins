@@ -17,8 +17,14 @@ export const StyledHome = styled.main`
     > li {
       cursor: pointer;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+
+      > h2 {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+      }
 
       > img {
         background-color: transparent;
@@ -29,6 +35,10 @@ export const StyledHome = styled.main`
           background-color: var(--color-primary);
           filter: brightness(1.1);
         }
+      }
+
+      > p {
+        font-size: 1.4rem;
       }
     }
   }

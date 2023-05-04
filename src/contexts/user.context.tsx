@@ -1,4 +1,5 @@
 import { IContextProps } from '@/interfaces/global.interfaces';
+import { IProducts } from '@/interfaces/products.interfaces';
 import { IUserRes } from '@/interfaces/users.interfaces';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -11,6 +12,12 @@ interface IUserContext {
   user: IUserRes | null;
   setUser: React.Dispatch<React.SetStateAction<IUserRes | null>>;
 
+  products: IProducts[];
+  setProducts: React.Dispatch<React.SetStateAction<IProducts[]>>;
+
+  productInfo: IProducts | null;
+  setProductInfo: React.Dispatch<React.SetStateAction<IProducts | null>>;
+
   modalUserEdit: boolean;
   setModalUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -19,6 +26,15 @@ interface IUserContext {
 
   modalUserRecovery: boolean;
   setModalUserRecovery: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalProductCreate: boolean;
+  setModalProductCreate: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalProductEdit: boolean;
+  setModalProductEdit: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalProductDelete: boolean;
+  setModalProductDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = React.createContext({} as IUserContext);
@@ -28,11 +44,24 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
 
   const [user, setUser] = React.useState<IUserRes | null>(null);
 
+  const [products, setProducts] = React.useState([] as IProducts[]);
+
+  const [productInfo, setProductInfo] = React.useState<IProducts | null>(null);
+
   const [modalUserEdit, setModalUserEdit] = React.useState<boolean>(false);
 
   const [modalUserDelete, setModalUserDelete] = React.useState<boolean>(false);
 
   const [modalUserRecovery, setModalUserRecovery] =
+    React.useState<boolean>(false);
+
+  const [modalProductCreate, setModalProductCreate] =
+    React.useState<boolean>(false);
+
+  const [modalProductEdit, setModalProductEdit] =
+    React.useState<boolean>(false);
+
+  const [modalProductDelete, setModalProductDelete] =
     React.useState<boolean>(false);
 
   const router = useRouter();
@@ -73,18 +102,38 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  React.useEffect(() => {
+    const listProducts = async () => {
+      const { data } = await axios.get('/api/products/list');
+      setProducts(data);
+    };
+
+    listProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <UserContext.Provider
       value={{
         userLogout,
         user,
         setUser,
+        products,
+        setProducts,
+        productInfo,
+        setProductInfo,
         modalUserEdit,
         setModalUserEdit,
         modalUserDelete,
         setModalUserDelete,
         modalUserRecovery,
         setModalUserRecovery,
+        modalProductCreate,
+        setModalProductCreate,
+        modalProductEdit,
+        setModalProductEdit,
+        modalProductDelete,
+        setModalProductDelete,
       }}
     >
       {children}

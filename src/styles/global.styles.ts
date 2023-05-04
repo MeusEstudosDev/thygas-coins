@@ -66,10 +66,8 @@ const StyledGlobal = createGlobalStyle`
 
         --color-whiteFixed: #FFFFFF;
 
-        /* --color-primary: rgb(25, 118, 210); */
         --color-primary: #00aa2d;
 
-        /* --color-secundary: #f2f8ff; */
         --color-secundary: #f2fff3;
 
         .my-toast {
