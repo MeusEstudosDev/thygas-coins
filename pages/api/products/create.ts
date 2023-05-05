@@ -27,6 +27,7 @@ export default withTokenMiddleware(
           description: yup.string().required(),
           stock: yup.number().required(),
           image: yup.string().optional(),
+          categoryId: yup.string().required(),
         })
         .validate(req.body, {
           stripUnknown: true,

@@ -17,15 +17,7 @@ export default async function handle(
     return res.status(405).json({ message: 'Método não permitido' });
   }
 
-  const { id } = req.query;
+  const categories = await prisma.category.findMany();
 
-  const productFound = await prisma.product.findFirst({
-    where: { id: id?.toString() },
-  });
-
-  if (!productFound) {
-    return res.status(404).json({ message: 'Produto não encontrado.' });
-  }
-
-  return res.status(200).json(productFound);
+  return res.status(200).json(categories);
 }

@@ -21,11 +21,7 @@ export default withTokenMiddleware(
       const validatedBody = await yup
         .object()
         .shape({
-          name: yup.string().optional(),
-          price: yup.number().optional(),
-          description: yup.string().optional(),
-          stock: yup.number().optional(),
-          image: yup.string().optional(),
+          name: yup.string().required(),
         })
         .validate(req.body, {
           stripUnknown: true,
@@ -51,11 +47,11 @@ export default withTokenMiddleware(
       return res.status(400).json({ message: 'Você não tem permissão.' });
     }
 
-    const productEdit = await prisma.product.update({
+    const categoryEdit = await prisma.category.update({
       where: { id: id?.toString() },
       data: req.body,
     });
 
-    return res.status(200).json(productEdit);
+    return res.status(200).json(categoryEdit);
   }
 );

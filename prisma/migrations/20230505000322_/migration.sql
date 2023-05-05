@@ -10,13 +10,21 @@ CREATE TABLE "user" (
 );
 
 -- CreateTable
-CREATE TABLE "Product" (
+CREATE TABLE "product" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "price" DECIMAL NOT NULL DEFAULT 0,
+    "price" DECIMAL NOT NULL,
     "description" TEXT NOT NULL,
     "stock" DECIMAL NOT NULL DEFAULT 0,
-    "image" TEXT NOT NULL DEFAULT '/image/imagenotfound.png'
+    "image" TEXT NOT NULL DEFAULT '/image/imagenotfound.png',
+    "categoryId" TEXT NOT NULL,
+    CONSTRAINT "product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "category" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "category" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL
 );
 
 -- CreateIndex

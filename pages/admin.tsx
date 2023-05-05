@@ -1,6 +1,9 @@
+import CreateCategoryModal from '@/components/modal/createCategory.component';
 import CreateProductModal from '@/components/modal/createProduct.component';
+import DeleteCategoryModal from '@/components/modal/deleteCategory.component';
 import DeleteProductModal from '@/components/modal/deleteProduct.component';
 import DeleteUserModal from '@/components/modal/deleteUser.component';
+import EditCategoryModal from '@/components/modal/editCategory.component';
 import EditProductModal from '@/components/modal/editProduct.component';
 import EditUserModal from '@/components/modal/editUser.component';
 import { UserContext } from '@/contexts/user.context';
@@ -28,12 +31,17 @@ const AdminPage = () => {
     <>
       {userContext.modalUserEdit && <EditUserModal />}
       {userContext.modalUserDelete && <DeleteUserModal />}
+
       {userContext.modalProductCreate && <CreateProductModal />}
       {userContext.modalProductEdit && <EditProductModal />}
       {userContext.modalProductDelete && <DeleteProductModal />}
+
+      {userContext.modalCategoryCreate && <CreateCategoryModal />}
+      {userContext.modalCategoryEdit && <EditCategoryModal />}
+      {userContext.modalCategoryDelete && <DeleteCategoryModal />}
       <StyledAdmin>
         <section>
-          <h2 style={{ width: '110px' }}>Minha conta</h2>
+          <h2 style={{ width: '100%' }}>Minha conta</h2>
           <div>
             <p>
               <strong>Nome: </strong>
@@ -65,7 +73,49 @@ const AdminPage = () => {
         </section>
 
         <section>
-          <h2 style={{ width: '110px' }}>Produtos</h2>
+          <h2 style={{ width: '100%' }}>Categorias</h2>
+
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              userContext.setModalCategoryCreate(true);
+            }}
+          >
+            Adicionar
+          </button>
+
+          <ul>
+            {userContext.categories.map((el) => (
+              <li key={el.id}>
+                <h2>{el.name}</h2>
+
+                <div>
+                  <button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      userContext.setCategoryInfo(el);
+                      userContext.setModalCategoryEdit(true);
+                    }}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      userContext.setCategoryInfo(el);
+                      userContext.setModalCategoryDelete(true);
+                    }}
+                  >
+                    Deletar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 style={{ width: '100%' }}>Produtos</h2>
 
           <button
             onClick={(event) => {

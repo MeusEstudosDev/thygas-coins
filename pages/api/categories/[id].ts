@@ -19,13 +19,13 @@ export default async function handle(
 
   const { id } = req.query;
 
-  const productFound = await prisma.product.findFirst({
+  const categoryFound = await prisma.category.findFirst({
     where: { id: id?.toString() },
   });
 
-  if (!productFound) {
-    return res.status(404).json({ message: 'Produto não encontrado.' });
+  if (!categoryFound) {
+    return res.status(404).json({ message: 'Categoria não encontrada.' });
   }
 
-  return res.status(200).json(productFound);
+  return res.status(200).json(categoryFound);
 }

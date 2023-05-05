@@ -5,6 +5,7 @@ export interface IProducts {
   description: string;
   stock: number;
   image: string;
+  categoryId: string;
 }
 
 export interface IProductReq {
@@ -13,5 +14,6 @@ export interface IProductReq {
   description: string;
   stock: number;
   image?: string;
+  categoryId: string;
   [key: string]: any;
 }

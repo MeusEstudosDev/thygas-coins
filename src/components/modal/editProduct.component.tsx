@@ -156,6 +156,7 @@ const EditProductModal = () => {
               name="price"
               type="number"
               placeholder=" "
+              step="any"
               value={userContext.productInfo?.price}
               onChange={(event) => {
                 userContext.setProductInfo({

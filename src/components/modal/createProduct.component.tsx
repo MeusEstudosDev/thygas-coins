@@ -5,6 +5,7 @@ import { StyledFormError } from '@/styles/formError.styles';
 import { StyledInput } from '@/styles/input.styles';
 import { StyledLabel } from '@/styles/label.styles';
 import { StyledModal } from '@/styles/modalstyles';
+import { StyledSelect } from '@/styles/select.styles';
 import { TitleH2 } from '@/styles/typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -28,11 +29,12 @@ const CreateProductModal = () => {
   } = useForm<IProductReq>({
     resolver: yupResolver(
       yup.object().shape({
-        name: yup.string().required(),
-        price: yup.number().required(),
-        description: yup.string().required(),
-        stock: yup.number().required(),
+        name: yup.string().required('Nome obrigatório.'),
+        price: yup.number().required('Preço obrigatório.'),
+        description: yup.string().required('Descrição obrigatória.'),
+        stock: yup.number().required('Estoque obrigatório.'),
         image: yup.string().optional(),
+        categoryId: yup.string().required('Categoria obrigatória.'),
       })
     ),
   });
@@ -139,12 +141,38 @@ const CreateProductModal = () => {
           </div>
 
           <div>
+            <StyledSelect
+              {...register('categoryId')}
+              id="categoryId"
+              name="categoryId"
+            >
+              <option value="">Escolha uma categoria</option>
+              {userContext.categories.map((el) => (
+                <option key={el.id} value={el.id}>
+                  {el.name}
+                </option>
+              ))}
+            </StyledSelect>
+            <StyledFormError>
+              {errors.categoryId && errors.categoryId.message}
+            </StyledFormError>
+          </div>
+
+          <div>
             <StyledInput
               {...register('price')}
               id="price"
               name="price"
               type="number"
               placeholder=" "
+              step="any"
+              value={userContext.productInfo?.price}
+              onChange={(event) => {
+                userContext.setProductInfo({
+                  ...userContext.productInfo!,
+                  price: Number(event.target.value),
+                });
+              }}
             />
             <StyledLabel>Preço</StyledLabel>
             <StyledFormError>
@@ -171,8 +199,16 @@ const CreateProductModal = () => {
               {...register('stock')}
               id="stock"
               name="stock"
-              type="number"
+              type="text"
               placeholder=" "
+              step="any"
+              value={userContext.productInfo?.stock}
+              onChange={(event) => {
+                userContext.setProductInfo({
+                  ...userContext.productInfo!,
+                  stock: Number(event.target.value),
+                });
+              }}
             />
             <StyledLabel>Estoque</StyledLabel>
             <StyledFormError>

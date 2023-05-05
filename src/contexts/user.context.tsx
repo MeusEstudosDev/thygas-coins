@@ -1,3 +1,4 @@
+import { ICategory } from '@/interfaces/category.interfaces';
 import { IContextProps } from '@/interfaces/global.interfaces';
 import { IProducts } from '@/interfaces/products.interfaces';
 import { IUserRes } from '@/interfaces/users.interfaces';
@@ -11,6 +12,12 @@ interface IUserContext {
 
   user: IUserRes | null;
   setUser: React.Dispatch<React.SetStateAction<IUserRes | null>>;
+
+  categories: ICategory[];
+  setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
+
+  categoryInfo: ICategory | null;
+  setCategoryInfo: React.Dispatch<React.SetStateAction<ICategory | null>>;
 
   products: IProducts[];
   setProducts: React.Dispatch<React.SetStateAction<IProducts[]>>;
@@ -35,6 +42,15 @@ interface IUserContext {
 
   modalProductDelete: boolean;
   setModalProductDelete: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalCategoryCreate: boolean;
+  setModalCategoryCreate: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalCategoryEdit: boolean;
+  setModalCategoryEdit: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalCategoryDelete: boolean;
+  setModalCategoryDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = React.createContext({} as IUserContext);
@@ -43,6 +59,12 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   const loadingContext = React.useContext(LoadingContext);
 
   const [user, setUser] = React.useState<IUserRes | null>(null);
+
+  const [categories, setCategories] = React.useState([] as ICategory[]);
+
+  const [categoryInfo, setCategoryInfo] = React.useState<ICategory | null>(
+    null
+  );
 
   const [products, setProducts] = React.useState([] as IProducts[]);
 
@@ -62,6 +84,15 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
     React.useState<boolean>(false);
 
   const [modalProductDelete, setModalProductDelete] =
+    React.useState<boolean>(false);
+
+  const [modalCategoryCreate, setModalCategoryCreate] =
+    React.useState<boolean>(false);
+
+  const [modalCategoryEdit, setModalCategoryEdit] =
+    React.useState<boolean>(false);
+
+  const [modalCategoryDelete, setModalCategoryDelete] =
     React.useState<boolean>(false);
 
   const router = useRouter();
@@ -103,12 +134,17 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   }, []);
 
   React.useEffect(() => {
-    const listProducts = async () => {
-      const { data } = await axios.get('/api/products/list');
-      setProducts(data);
+    const list = async () => {
+      const [res1, res2] = await Promise.all([
+        await axios.get('/api/products/list'),
+        await axios.get('/api/categories/list'),
+      ]);
+
+      setProducts(res1.data);
+      setCategories(res2.data);
     };
 
-    listProducts();
+    list();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -118,6 +154,10 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         userLogout,
         user,
         setUser,
+        categories,
+        setCategories,
+        categoryInfo,
+        setCategoryInfo,
         products,
         setProducts,
         productInfo,
@@ -134,6 +174,12 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setModalProductEdit,
         modalProductDelete,
         setModalProductDelete,
+        modalCategoryCreate,
+        setModalCategoryCreate,
+        modalCategoryEdit,
+        setModalCategoryEdit,
+        modalCategoryDelete,
+        setModalCategoryDelete,
       }}
     >
       {children}

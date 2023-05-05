@@ -2,10 +2,11 @@ import { corsMiddleware } from '@/middlewares/cors.middleware';
 import withTokenMiddleware from '@/middlewares/token.middleware';
 import { PrismaClient } from '@prisma/client';
 import Cors from 'cors';
+import { randomUUID } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
 
-const cors = corsMiddleware(Cors({ methods: ['PATCH'] }));
+const cors = corsMiddleware(Cors({ methods: ['POST'] }));
 
 const prisma = new PrismaClient();
 
@@ -13,7 +14,7 @@ export default withTokenMiddleware(
   async (req: NextApiRequest, res: NextApiResponse) => {
     await cors(req, res);
 
-    if (req.method !== 'PATCH') {
+    if (req.method !== 'POST') {
       return res.status(405).json({ message: 'Método não permitido' });
     }
 
@@ -21,11 +22,7 @@ export default withTokenMiddleware(
       const validatedBody = await yup
         .object()
         .shape({
-          name: yup.string().optional(),
-          price: yup.number().optional(),
-          description: yup.string().optional(),
-          stock: yup.number().optional(),
-          image: yup.string().optional(),
+          name: yup.string().required(),
         })
         .validate(req.body, {
           stripUnknown: true,
@@ -37,25 +34,33 @@ export default withTokenMiddleware(
       return res.status(400).json({ message });
     }
 
-    const { id } = req.query;
-
     const userFound = await prisma.user.findFirst({
       where: { id: req.userId },
     });
 
     if (!userFound) {
-      return res.status(404).json({ message: 'Você não tem permissão.' });
-    }
-
-    if (!userFound?.isAdmin) {
       return res.status(400).json({ message: 'Você não tem permissão.' });
     }
 
-    const productEdit = await prisma.product.update({
-      where: { id: id?.toString() },
-      data: req.body,
+    if (!userFound.isAdmin) {
+      return res.status(400).json({ message: 'Você não tem permissão.' });
+    }
+
+    const categoryFound = await prisma.category.findFirst({
+      where: { name: req.body.name },
     });
 
-    return res.status(200).json(productEdit);
+    if (categoryFound) {
+      return res.status(400).json({ message: 'Categoria já cadastrada.' });
+    }
+
+    const categoryCreate = await prisma.category.create({
+      data: {
+        id: randomUUID(),
+        ...req.body,
+      },
+    });
+
+    return res.status(200).json(categoryCreate);
   }
 );
