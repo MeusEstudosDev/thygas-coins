@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id            String   @id
+  id            String    @id
   name          String
-  email         String   @unique
+  email         String    @unique
   password      String
-  registered_at DateTime @default(now())
-  isAdmin       Boolean  @default(false)
-  soft_delete   Boolean  @default(false)
+  registered_at DateTime  @default(now())
+  isAdmin       Boolean   @default(false)
+  soft_delete   Boolean   @default(false)
+  Request       Request[]
 
   @@map("user")
 }
@@ -39,4 +40,31 @@ model Category {
   Product Product[]
 
   @@map("category")
+}
+
+model Request {
+  id          String         @id
+  number      String
+  total       Decimal
+  status      String
+  description String?
+  createdAt   DateTime       @default(now())
+  client      User           @relation(fields: [clientId], references: [id])
+  clientId    String
+  itens       RequestItens[]
+
+  @@map("request")
+}
+
+model RequestItens {
+  id        String  @id
+  name      String
+  count     Decimal
+  price     Decimal
+  character String?
+  image     String
+  request   Request @relation(fields: [requestId], references: [id])
+  requestId String
+
+  @@map("requestitens")
 }

@@ -4,6 +4,16 @@ export const StyledFooter = styled.footer`
   width: 100%;
   border-top: 0.2rem solid var(--color-grey-6);
   background-color: var(--color-grey-10);
+  position: relative;
+
+  > a {
+    > img {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      cursor: pointer;
+    }
+  }
 
   > div {
     display: flex;

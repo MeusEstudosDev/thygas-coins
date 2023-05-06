@@ -1,6 +1,7 @@
 import { ICategory } from '@/interfaces/category.interfaces';
 import { IContextProps } from '@/interfaces/global.interfaces';
 import { IProductCart, IProducts } from '@/interfaces/products.interfaces';
+import { IRequests } from '@/interfaces/requests.interfaces';
 import { IUserRes } from '@/interfaces/users.interfaces';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -24,6 +25,12 @@ interface IUserContext {
 
   productInfo: IProducts | null;
   setProductInfo: React.Dispatch<React.SetStateAction<IProducts | null>>;
+
+  requests: IRequests[] | null;
+  setRequests: React.Dispatch<React.SetStateAction<IRequests[] | null>>;
+
+  requestInfo: IRequests | null;
+  setRequestInfo: React.Dispatch<React.SetStateAction<IRequests | null>>;
 
   cart: IProductCart[];
   setCart: React.Dispatch<React.SetStateAction<IProductCart[]>>;
@@ -54,6 +61,12 @@ interface IUserContext {
 
   modalCategoryDelete: boolean;
   setModalCategoryDelete: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalRequest: boolean;
+  setModalRequest: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalRequestEdit: boolean;
+  setModalRequestEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = React.createContext({} as IUserContext);
@@ -72,6 +85,10 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   const [products, setProducts] = React.useState([] as IProducts[]);
 
   const [productInfo, setProductInfo] = React.useState<IProducts | null>(null);
+
+  const [requests, setRequests] = React.useState<IRequests[] | null>(null);
+
+  const [requestInfo, setRequestInfo] = React.useState<IRequests | null>(null);
 
   const [cart, setCart] = React.useState<IProductCart[]>([]);
 
@@ -98,6 +115,11 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
     React.useState<boolean>(false);
 
   const [modalCategoryDelete, setModalCategoryDelete] =
+    React.useState<boolean>(false);
+
+  const [modalRequest, setModalRequest] = React.useState<boolean>(false);
+
+  const [modalRequestEdit, setModalRequestEdit] =
     React.useState<boolean>(false);
 
   const router = useRouter();
@@ -167,6 +189,10 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setProducts,
         productInfo,
         setProductInfo,
+        requests,
+        setRequests,
+        requestInfo,
+        setRequestInfo,
         cart,
         setCart,
         modalUserEdit,
@@ -187,6 +213,10 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setModalCategoryEdit,
         modalCategoryDelete,
         setModalCategoryDelete,
+        modalRequest,
+        setModalRequest,
+        modalRequestEdit,
+        setModalRequestEdit,
       }}
     >
       {children}

@@ -1,23 +1,30 @@
+import { LoadingContext } from '@/contexts/loading.context';
 import { UserContext } from '@/contexts/user.context';
 import { IProducts } from '@/interfaces/products.interfaces';
 import { StyledCart } from '@/styles/pageCart.styles';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Image from 'next/image';
-import React from 'react';
 import { useRouter } from 'next/navigation';
+import React from 'react';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const router = useRouter();
 
   const userContext = React.useContext(UserContext);
 
-  const handle = (id: number) => {
+  const loadingContext = React.useContext(LoadingContext);
+
+  const [filter, setFilter] = React.useState<IProducts[]>();
+  const handleDelete = (id: number) => {
     const cartList = userContext.cart.filter((el) => el.id !== id);
 
     userContext.setCart(cartList);
   };
 
-  const [filter, setFilter] = React.useState<IProducts[]>();
+  const handleFinish = async () => {
+    router.push('/payment');
+  };
 
   React.useEffect(() => {
     const list = userContext.products.filter((el) => el.stock > 0);
@@ -25,6 +32,7 @@ const CartPage = () => {
     setFilter(list);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userContext.products]);
+
   return (
     <StyledCart>
       <section>
@@ -52,7 +60,7 @@ const CartPage = () => {
                       {el.character ? el.character : userContext.user?.email}
                     </strong>
                   </p>
-                  <span onClick={() => handle(el.id)}>
+                  <span onClick={() => handleDelete(el.id)}>
                     <DeleteForeverIcon color="error" fontSize="large" />
                   </span>
                 </li>
@@ -72,7 +80,18 @@ const CartPage = () => {
                   })}
               </p>
 
-              <button>Finalizar compra</button>
+              <button
+                onClick={() => {
+                  if (userContext.user) {
+                    handleFinish();
+                  } else {
+                    toast.error('Você precisa estar logado.');
+                    router.push('/login');
+                  }
+                }}
+              >
+                Finalizar compra
+              </button>
             </div>
           </>
         ) : (

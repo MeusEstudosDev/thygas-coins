@@ -109,5 +109,43 @@ export const StyledAdmin = styled.main`
         }
       }
     }
+
+    > span {
+      display: flex;
+      justify-content: center;
+      > ul {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+
+        > li {
+          display: flex;
+          align-items: center;
+          width: 50rem;
+          gap: 1.2rem;
+          position: relative;
+          border: 0.1rem solid black;
+          border-radius: 0.4rem;
+          background-color: var(--color-whiteFixed);
+          padding: 0.5rem;
+
+          :hover {
+            background-color: var(--color-secundary);
+            cursor: pointer;
+          }
+
+          > p {
+            font-size: 1.4rem;
+            letter-spacing: 0.1rem;
+          }
+
+          > span {
+            position: absolute;
+            right: 1rem;
+            cursor: pointer;
+          }
+        }
+      }
+    }
   }
 `;

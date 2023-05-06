@@ -27,5 +27,29 @@ CREATE TABLE "category" (
     "name" TEXT NOT NULL
 );
 
+-- CreateTable
+CREATE TABLE "request" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "number" TEXT NOT NULL,
+    "total" DECIMAL NOT NULL,
+    "status" TEXT NOT NULL,
+    "description" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "clientId" TEXT NOT NULL,
+    CONSTRAINT "request_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "requestitens" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "count" DECIMAL NOT NULL,
+    "price" DECIMAL NOT NULL,
+    "character" TEXT,
+    "image" TEXT NOT NULL,
+    "requestId" TEXT NOT NULL,
+    CONSTRAINT "requestitens_requestId_fkey" FOREIGN KEY ("requestId") REFERENCES "request" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
