@@ -1,5 +1,108 @@
+import { UserContext } from '@/contexts/user.context';
+import { IProducts } from '@/interfaces/products.interfaces';
+import { StyledCart } from '@/styles/pageCart.styles';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Image from 'next/image';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+
 const CartPage = () => {
-  return <h1>Cart</h1>;
+  const router = useRouter();
+
+  const userContext = React.useContext(UserContext);
+
+  const handle = (id: number) => {
+    const cartList = userContext.cart.filter((el) => el.id !== id);
+
+    userContext.setCart(cartList);
+  };
+
+  const [filter, setFilter] = React.useState<IProducts[]>();
+
+  React.useEffect(() => {
+    const list = userContext.products.filter((el) => el.stock > 0);
+
+    setFilter(list);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userContext.products]);
+  return (
+    <StyledCart>
+      <section>
+        {userContext.cart.length > 0 ? (
+          <>
+            <h2 style={{ width: '180px' }}>Carrinho de compras</h2>
+            <ul>
+              {userContext.cart.map((el, i) => (
+                <li key={el.name + i}>
+                  <Image src={el.image} alt={el.name} width={70} height={70} />
+
+                  <p>
+                    <strong>
+                      {el.count} {el.name}
+                    </strong>{' '}
+                    por{' '}
+                    <strong>
+                      {Number(el.price).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
+                    </strong>{' '}
+                    será enviado para{' '}
+                    <strong>
+                      {el.character ? el.character : userContext.user?.email}
+                    </strong>
+                  </p>
+                  <span onClick={() => handle(el.id)}>
+                    <DeleteForeverIcon color="error" fontSize="large" />
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <div>
+              <p>
+                <strong>Total: </strong>
+                {userContext.cart
+                  .reduce((a, b) => {
+                    return a + b.price;
+                  }, 0)
+                  .toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+              </p>
+
+              <button>Finalizar compra</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3>Seu carrinho está vazio, vamos comprar algo?</h3>
+            <span>
+              <ul>
+                {filter?.map((el) => (
+                  <li
+                    key={el.id}
+                    onClick={() => {
+                      router.push(`/product/${el.id}`);
+                    }}
+                  >
+                    <h2>{el.name}</h2>
+                    <Image
+                      src={el.image}
+                      alt={el.name}
+                      width={180}
+                      height={180}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </span>
+          </>
+        )}
+      </section>
+    </StyledCart>
+  );
 };
 
 export default CartPage;

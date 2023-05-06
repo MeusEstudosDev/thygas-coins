@@ -81,6 +81,7 @@ export const StyledHeader = styled.header`
         flex-direction: column;
         align-items: center;
         cursor: pointer;
+        position: relative;
 
         > svg {
           width: 4rem;
@@ -94,6 +95,21 @@ export const StyledHeader = styled.header`
           :hover {
             color: black;
           }
+        }
+
+        > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: 0;
+          right: 0;
+          background-color: red;
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background-color: var(--color-grey-0);
+          color: var(--color-grey-6);
         }
       }
     }

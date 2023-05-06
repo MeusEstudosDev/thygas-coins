@@ -1,6 +1,6 @@
 import { ICategory } from '@/interfaces/category.interfaces';
 import { IContextProps } from '@/interfaces/global.interfaces';
-import { IProducts } from '@/interfaces/products.interfaces';
+import { IProductCart, IProducts } from '@/interfaces/products.interfaces';
 import { IUserRes } from '@/interfaces/users.interfaces';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -24,6 +24,9 @@ interface IUserContext {
 
   productInfo: IProducts | null;
   setProductInfo: React.Dispatch<React.SetStateAction<IProducts | null>>;
+
+  cart: IProductCart[];
+  setCart: React.Dispatch<React.SetStateAction<IProductCart[]>>;
 
   modalUserEdit: boolean;
   setModalUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -69,6 +72,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   const [products, setProducts] = React.useState([] as IProducts[]);
 
   const [productInfo, setProductInfo] = React.useState<IProducts | null>(null);
+
+  const [cart, setCart] = React.useState<IProductCart[]>([]);
 
   const [modalUserEdit, setModalUserEdit] = React.useState<boolean>(false);
 
@@ -162,6 +167,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setProducts,
         productInfo,
         setProductInfo,
+        cart,
+        setCart,
         modalUserEdit,
         setModalUserEdit,
         modalUserDelete,

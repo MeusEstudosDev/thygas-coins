@@ -7,6 +7,14 @@ export const StyledHome = styled.main`
     min-height: calc(100vh - (150px + 175px));
   }
 
+  > div {
+    margin: 0 auto;
+    max-width: 110rem;
+    padding: 4rem 0 0 0;
+    display: flex;
+    gap: 2rem;
+  }
+
   > ul {
     margin: 0 auto;
     max-width: 110rem;

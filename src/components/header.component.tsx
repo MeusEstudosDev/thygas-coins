@@ -54,6 +54,9 @@ const HeaderComponent = () => {
           >
             <ShoppingCartCheckoutIcon fontSize="large" color="success" />
             <p>Carrinho</p>
+            {userContext.cart.length > 0 && (
+              <span>{userContext.cart.length}</span>
+            )}
           </span>
         </nav>
       </div>

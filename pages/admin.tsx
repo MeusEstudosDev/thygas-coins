@@ -7,16 +7,35 @@ import EditCategoryModal from '@/components/modal/editCategory.component';
 import EditProductModal from '@/components/modal/editProduct.component';
 import EditUserModal from '@/components/modal/editUser.component';
 import { UserContext } from '@/contexts/user.context';
+import { IProducts } from '@/interfaces/products.interfaces';
 import { StyledAdmin } from '@/styles/admin.styles';
+import { StyledSelect } from '@/styles/select.styles';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AdminPage = () => {
   const userContext = React.useContext(UserContext);
 
   const router = useRouter();
+
+  const [filterCategories, setFilterCategories] = useState('all');
+
+  const [filter, setFilter] = useState<IProducts[]>();
+
+  React.useEffect(() => {
+    if (filterCategories === 'all') {
+      return setFilter(userContext.products);
+    }
+
+    const filterProducts = userContext.products.filter(
+      (el) => el.categoryId === filterCategories
+    );
+
+    setFilter(filterProducts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterCategories]);
 
   React.useEffect(() => {
     if (userContext.user && !userContext.user?.isAdmin) {
@@ -126,8 +145,19 @@ const AdminPage = () => {
             Adicionar
           </button>
 
+          <div>
+            <StyledSelect onChange={(e) => setFilterCategories(e.target.value)}>
+              <option value="all">Todas categorias</option>
+              {userContext.categories.map((el) => (
+                <option key={el.id} value={el.id}>
+                  {el.name}
+                </option>
+              ))}
+            </StyledSelect>
+          </div>
+
           <ul>
-            {userContext.products.map((el) => (
+            {filter?.map((el) => (
               <li key={el.id}>
                 <h2>{el.name}</h2>
                 <p>

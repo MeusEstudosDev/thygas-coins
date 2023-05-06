@@ -17,3 +17,18 @@ export interface IProductReq {
   categoryId: string;
   [key: string]: any;
 }
+
+export interface IProductBuyReq {
+  character?: string;
+  count?: number;
+  [key: string]: any;
+}
+
+export interface IProductCart {
+  id: number;
+  name: string;
+  count: number;
+  price: number;
+  character?: string;
+  image: string;
+}

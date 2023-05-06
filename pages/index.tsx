@@ -1,6 +1,7 @@
 import { UserContext } from '@/contexts/user.context';
 import { IProducts } from '@/interfaces/products.interfaces';
 import { StyledHome } from '@/styles/home.styles';
+import { StyledSelect } from '@/styles/select.styles';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -10,22 +11,39 @@ const HomePage = () => {
 
   const router = useRouter();
 
-  const [products, setProducts] = React.useState<IProducts[]>([]);
+  const [filterCategories, setFilterCategories] = React.useState('all');
+
+  const [filter, setFilter] = React.useState<IProducts[]>();
 
   React.useEffect(() => {
-    const filter = () => {
-      const list = userContext.products.filter((el) => el.stock > 0);
+    const list = userContext.products.filter((el) => el.stock > 0);
 
-      setProducts(list);
-    };
+    if (filterCategories === 'all') {
+      return setFilter(list);
+    }
 
-    filter();
-  }, [userContext.products]);
+    const filterProducts = list.filter(
+      (el) => el.categoryId === filterCategories
+    );
+
+    setFilter(filterProducts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userContext.products, filterCategories]);
 
   return (
     <StyledHome>
+      <div>
+        <StyledSelect onChange={(e) => setFilterCategories(e.target.value)}>
+          <option value="all">Todas categorias</option>
+          {userContext.categories.map((el) => (
+            <option key={el.id} value={el.id}>
+              {el.name}
+            </option>
+          ))}
+        </StyledSelect>
+      </div>
       <ul>
-        {products.map((el) => (
+        {filter?.map((el) => (
           <li
             key={el.id}
             onClick={() => {
