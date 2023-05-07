@@ -100,7 +100,14 @@ const RequestModal = () => {
           </ul>
 
           <div>
-            <button>Fechar</button>
+            <button
+              onClick={(event) => {
+                event.preventDefault();
+                userContext.setModalRequest(false);
+              }}
+            >
+              Fechar
+            </button>
           </div>
         </form>
       </section>
