@@ -19,5 +19,6 @@ export default async function handle(
 
   const products = await prisma.product.findMany();
 
+  res.setHeader('Content-Type', 'application/json; charset=UTF-8');
   return res.status(200).json(products);
 }
