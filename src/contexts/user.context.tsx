@@ -163,8 +163,12 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   React.useEffect(() => {
     const list = async () => {
       const [res1, res2] = await Promise.all([
-        await axios.get('/api/products/list'),
-        await axios.get('/api/categories/list'),
+        await axios.get('/api/products/list', {
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+        }),
+        await axios.get('/api/categories/list', {
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+        }),
       ]);
 
       setProducts(res1.data);
