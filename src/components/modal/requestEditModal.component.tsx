@@ -156,7 +156,7 @@ const RequestEditModal = () => {
             <p>
               <strong>Total: </strong>
               {Number(
-                userContext.requestInfo?.itens.reduce((a, b) => {
+                userContext.requestInfo?.itens?.reduce((a, b) => {
                   return a + Number(b.price);
                 }, 0)
               ).toLocaleString('pt-BR', {
@@ -187,7 +187,7 @@ const RequestEditModal = () => {
           </div>
 
           <ul>
-            {userContext.requestInfo?.itens.map((el) => (
+            {userContext.requestInfo?.itens?.map((el) => (
               <li key={el.id}>
                 <Image src={el.image} alt={el.name} width={45} height={45} />
                 <p>

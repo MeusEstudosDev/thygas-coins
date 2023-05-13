@@ -22,6 +22,7 @@ export default withTokenMiddleware(
         .object()
         .shape({
           name: yup.string().required(),
+          image: yup.string().optional(),
         })
         .validate(req.body, {
           stripUnknown: true,

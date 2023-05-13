@@ -51,14 +51,6 @@ export default withTokenMiddleware(
       return res.status(400).json({ message: 'Você não tem permissão.' });
     }
 
-    const productFound = await prisma.product.findFirst({
-      where: { name: req.body.name },
-    });
-
-    if (productFound) {
-      return res.status(400).json({ message: 'Produto já cadastrado.' });
-    }
-
     const productCreate = await prisma.product.create({
       data: {
         id: randomUUID(),

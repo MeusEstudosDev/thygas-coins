@@ -33,7 +33,10 @@ const HomePage = () => {
   return (
     <StyledHome>
       <div>
-        <StyledSelect onChange={(e) => setFilterCategories(e.target.value)}>
+        <StyledSelect
+          onChange={(e) => setFilterCategories(e.target.value)}
+          value={filterCategories}
+        >
           <option value="all">Todas categorias</option>
           {userContext.categories.map((el) => (
             <option key={el.id} value={el.id}>
@@ -43,17 +46,29 @@ const HomePage = () => {
         </StyledSelect>
       </div>
       <ul>
-        {filter?.map((el) => (
-          <li
-            key={el.id}
-            onClick={() => {
-              router.push(`/product/${el.id}`);
-            }}
-          >
-            <h2>{el.name}</h2>
-            <Image src={el.image} alt={el.name} width={180} height={180} />
-          </li>
-        ))}
+        {filterCategories === 'all'
+          ? userContext.categories.map((el) => (
+              <li key={el.id} onClick={() => setFilterCategories(el.id)}>
+                <Image src={el.image} alt={el.name} width={180} height={180} />
+              </li>
+            ))
+          : filter?.map((el) => (
+              <li
+                key={el.id}
+                onClick={() => {
+                  router.push(`/product/${el.id}`);
+                }}
+              >
+                <h2>{el.name}</h2>
+                <Image src={el.image} alt={el.name} width={180} height={180} />
+                <h2>
+                  {Number(el.price).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </h2>
+              </li>
+            ))}
       </ul>
     </StyledHome>
   );

@@ -163,6 +163,8 @@ const AdminPage = () => {
               <li key={el.id}>
                 <h2>{el.name}</h2>
 
+                <Image src={el.image} alt={el.name} width={180} height={180} />
+
                 <div>
                   <button
                     onClick={(event) => {
@@ -368,7 +370,7 @@ const AdminPage = () => {
                       width: '80px',
                     }}
                   >
-                    {el.itens.length}
+                    {el.itens?.length}
                   </p>
                   <p
                     style={{

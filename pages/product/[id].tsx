@@ -38,12 +38,12 @@ const ProductPage = () => {
   const handle = async (data: IProductBuyReq) => {
     loadingContext.setLoading(true);
 
-    if (router.pathname === '/product/[id]') {
-      if (!data.character) {
-        loadingContext.setLoading(false);
-        return toast.error('Este char não existe.');
-      }
+    if (data.character === '') {
+      loadingContext.setLoading(false);
+      return toast.error('Este char não existe.');
+    }
 
+    if (router.pathname === '/product/[id]' && data.character) {
       if (data.count === undefined || data.count <= 0) {
         loadingContext.setLoading(false);
         return toast.error('Você deve comprar 25 ou mais TC.');

@@ -94,6 +94,7 @@ export const StyledCart = styled.main`
         display: flex;
         gap: 2rem;
         overflow: auto;
+        flex-wrap: wrap;
 
         > li {
           cursor: pointer;
@@ -103,6 +104,7 @@ export const StyledCart = styled.main`
           justify-content: center;
 
           > h2 {
+            max-width: 18rem;
             font-size: 1.4rem;
             text-transform: uppercase;
           }

@@ -29,6 +29,7 @@ const EditCategoryModal = () => {
     resolver: yupResolver(
       yup.object().shape({
         name: yup.string().required(),
+        image: yup.string().optional(),
       })
     ),
   });
@@ -140,6 +141,20 @@ const EditCategoryModal = () => {
             <StyledLabel>Nome</StyledLabel>
             <StyledFormError>
               {errors.name && errors.name.message}
+            </StyledFormError>
+          </div>
+
+          <div>
+            <StyledInput
+              {...register('image')}
+              id="image"
+              name="image"
+              type="text"
+              placeholder=" "
+            />
+            <StyledLabel>Imagem</StyledLabel>
+            <StyledFormError>
+              {errors.image && errors.image.message}
             </StyledFormError>
           </div>
 

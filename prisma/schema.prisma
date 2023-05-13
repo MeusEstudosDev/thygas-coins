@@ -37,6 +37,7 @@ model Product {
 model Category {
   id      String    @id
   name    String
+  image   String    @default("/image/imagenotfound.png")
   Product Product[]
 
   @@map("category")

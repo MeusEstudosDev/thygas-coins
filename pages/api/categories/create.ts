@@ -18,11 +18,12 @@ export default withTokenMiddleware(
       return res.status(405).json({ message: 'Método não permitido' });
     }
 
-    try {
+    try { 
       const validatedBody = await yup
         .object()
         .shape({
           name: yup.string().required(),
+          image: yup.string().optional(),
         })
         .validate(req.body, {
           stripUnknown: true,
