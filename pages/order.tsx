@@ -31,6 +31,8 @@ const OrderPage = () => {
             headers: { Authorization: 'Bearer ' + token },
           });
 
+          console.log(data);
+
           userContext.setRequests(data);
         } catch (e: any) {
           toast.error(e.response.data.message, {

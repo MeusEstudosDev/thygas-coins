@@ -2,7 +2,6 @@ import { UserContext } from '@/contexts/user.context';
 import { StyledHeader } from '@/styles/header.styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
-import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -12,15 +11,19 @@ const HeaderComponent = () => {
 
   const router = useRouter();
 
+  const [search, setSearch] = React.useState('all');
+
   return (
     <StyledHeader>
       <div>
         <h2 onClick={() => router.push('/')}>Thygas Coins</h2>
         <form action="">
-          <input type="text" placeholder="Procurar produto..." />
-          <button>
-            <SearchIcon fontSize="large" color="success" />
-          </button>
+          <input
+            type="text"
+            value={userContext.homeSearch}
+            placeholder="Procurar produto..."
+            onChange={(e) => userContext.setHomeSearch(e.target.value)}
+          />
         </form>
         <nav>
           <span

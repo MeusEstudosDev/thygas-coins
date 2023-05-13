@@ -25,7 +25,11 @@ export default withTokenMiddleware(
     }
 
     if (userFound.isAdmin) {
-      const requests = await prisma.request.findMany({});
+      const requests = await prisma.request.findMany({
+        include: {
+          itens: true,
+        },
+      });
       return res.status(200).json(requests);
     }
 

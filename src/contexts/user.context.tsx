@@ -35,6 +35,9 @@ interface IUserContext {
   cart: IProductCart[];
   setCart: React.Dispatch<React.SetStateAction<IProductCart[]>>;
 
+  homeSearch: string;
+  setHomeSearch: React.Dispatch<React.SetStateAction<string>>;
+
   modalUserEdit: boolean;
   setModalUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -67,6 +70,9 @@ interface IUserContext {
 
   modalRequestEdit: boolean;
   setModalRequestEdit: React.Dispatch<React.SetStateAction<boolean>>;
+
+  modalContinue: boolean;
+  setModalContinue: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = React.createContext({} as IUserContext);
@@ -91,6 +97,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   const [requestInfo, setRequestInfo] = React.useState<IRequests | null>(null);
 
   const [cart, setCart] = React.useState<IProductCart[]>([]);
+
+  const [homeSearch, setHomeSearch] = React.useState('');
 
   const [modalUserEdit, setModalUserEdit] = React.useState<boolean>(false);
 
@@ -121,6 +129,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
 
   const [modalRequestEdit, setModalRequestEdit] =
     React.useState<boolean>(false);
+
+  const [modalContinue, setModalContinue] = React.useState<boolean>(false);
 
   const router = useRouter();
 
@@ -199,6 +209,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setRequestInfo,
         cart,
         setCart,
+        homeSearch,
+        setHomeSearch,
         modalUserEdit,
         setModalUserEdit,
         modalUserDelete,
@@ -221,6 +233,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setModalRequest,
         modalRequestEdit,
         setModalRequestEdit,
+        modalContinue,
+        setModalContinue,
       }}
     >
       {children}

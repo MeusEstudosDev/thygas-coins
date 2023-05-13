@@ -32,8 +32,7 @@ export const StyledHeader = styled.header`
       > input {
         width: 100%;
         padding: 0.8rem;
-        border-bottom-left-radius: 0.6rem;
-        border-top-left-radius: 0.6rem;
+        border-radius: 0.6rem;
         border: 0.1rem solid var(--color-grey-3);
 
         :focus {

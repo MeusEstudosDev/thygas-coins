@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const StyledHome = styled.main`
   min-height: calc(100vh - (285px + 335px));
+  padding: 1rem;
 
   @media (min-width: 1024px) {
     min-height: calc(100vh - (150px + 175px));
@@ -55,6 +56,17 @@ export const StyledHome = styled.main`
         filter: brightness(1.1);
         border: 1px solid var(--color-grey-0);
       }
+    }
+  }
+
+  > div {
+    > button {
+      padding: 1.2rem 0.8rem;
+      border: 0.1rem solid var(--color-primary);
+      border-radius: 0.6rem;
+      background-color: var(--color-grey-8);
+      letter-spacing: 0.1rem;
+      cursor: pointer;
     }
   }
 `;

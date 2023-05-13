@@ -57,6 +57,16 @@ export const StyledProduct = styled.main`
           position: relative;
           margin: 1.5rem 0;
 
+          > div {
+            display: flex;
+            justify-content: space-between;
+            margin-top: -1rem;
+
+            > svg {
+              cursor: pointer;
+            }
+          }
+
           > p {
             font-size: 1.4rem;
           }

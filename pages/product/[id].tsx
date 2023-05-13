@@ -1,3 +1,4 @@
+import ContinueModal from '@/components/modal/continue.component';
 import { LoadingContext } from '@/contexts/loading.context';
 import { UserContext } from '@/contexts/user.context';
 import { IProductBuyReq, IProducts } from '@/interfaces/products.interfaces';
@@ -5,6 +6,8 @@ import { StyledInput } from '@/styles/input.styles';
 import { StyledLabel } from '@/styles/label.styles';
 import { StyledProduct } from '@/styles/pageProduct.styles';
 import { yupResolver } from '@hookform/resolvers/yup';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -69,6 +72,8 @@ const ProductPage = () => {
 
       userContext.setCart([newProduct, ...userContext.cart]);
 
+      userContext.setModalContinue(true);
+
       return loadingContext.setLoading(false);
     }
 
@@ -88,63 +93,68 @@ const ProductPage = () => {
 
     userContext.setCart([newProduct, ...userContext.cart]);
 
+    userContext.setModalContinue(true);
+
     return loadingContext.setLoading(false);
   };
 
   React.useEffect(() => {
-    if (id && userContext.categories) {
+    if (userContext.products.length > 0 && id) {
       const getProduct = async () => {
-        loadingContext.setLoading(true);
+        const data = userContext.products.find((el) => el.id === id);
 
-        try {
-          const { data } = await axios.get(`/api/products/${id}`);
-
+        if (data) {
           setProduct(data);
-        } catch (e: any) {
-          toast.error(e.response.data.message, {
-            autoClose: 5000,
-            className: 'my-toast-error',
-          });
-        } finally {
-          loadingContext.setLoading(false);
+        } else {
+          router.push('/');
         }
       };
 
       getProduct();
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, userContext.categories]);
+  }, [userContext.products, id, router]);
 
   return (
     <StyledProduct>
+      {userContext.modalContinue && <ContinueModal />}
       <section>
         <div
           style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
         >
-          <Image
-            src={product?.image!}
-            alt={product?.name!}
-            width={280}
-            height={280}
-          />
+          {product?.image ? (
+            <Image
+              src={product?.image!}
+              alt={product?.name!}
+              width={280}
+              height={280}
+            />
+          ) : (
+            <Image
+              src="/image/imagenotfound.png"
+              alt="imagem não encontrada"
+              width={280}
+              height={280}
+            />
+          )}
         </div>
 
         <div style={{ width: '100%' }}>
           <h2>
-            {product?.name} -{' '}
-            {product?.name.toLocaleLowerCase() === 'tibia coins'
-              ? ((Number(product?.price) / 250) * count).toLocaleString(
-                  'pt-BR',
-                  {
+            {product?.name ? product?.name + ' - ' : 'carregando...'}
+            {product?.name
+              ? product?.name.toLocaleLowerCase() === 'tibia coins'
+                ? ((Number(product?.price) / 250) * count).toLocaleString(
+                    'pt-BR',
+                    {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }
+                  )
+                : Number(product?.price).toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
-                  }
-                )
-              : Number(product?.price).toLocaleString('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL',
-                })}
+                  })
+              : ''}
           </h2>
           <form onSubmit={handleSubmit(handle)}>
             <div>
@@ -174,15 +184,33 @@ const ProductPage = () => {
                     {...register('count')}
                     onChange={(e) => setCount(Number(e.target.value))}
                   />
+                  <div>
+                    <ArrowBackIcon
+                      fontSize="large"
+                      onClick={() => {
+                        if (count > 25) {
+                          setCount(Number(count - 25));
+                        }
+                      }}
+                    />
+                    <ArrowForwardIcon
+                      fontSize="large"
+                      onClick={() => {
+                        if (product?.stock > count) {
+                          setCount(Number(count + 25));
+                        }
+                      }}
+                    />
+                  </div>
                 </>
               )}
 
               <p>
                 <strong>Descrição: </strong>
-                {product?.description}
+                {product?.description ? product?.description : 'carregando...'}
               </p>
 
-              <button type="submit">Adicionar no carrinho</button>
+              {product && <button type="submit">Adicionar no carrinho</button>}
             </div>
           </form>
         </div>

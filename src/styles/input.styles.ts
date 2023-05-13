@@ -4,8 +4,9 @@ export const StyledInput = styled.input`
   padding: 1.2rem 0.8rem;
   border: 0.1rem solid var(--color-primary);
   border-radius: 0.6rem;
-  background-color: var(--color-grey-8);
+  background-color: #f1f3f590;
   letter-spacing: 0.1rem;
+  z-index: 3;
 
   &:focus {
     outline: none;
