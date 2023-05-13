@@ -24,7 +24,7 @@ export default withTokenMiddleware(
       return res.status(400).json({ message: 'Você não tem permissão.' });
     }
 
-    if (!userFound.isAdmin) {
+    if (userFound.isAdmin) {
       const requests = await prisma.request.findMany({});
       return res.status(200).json(requests);
     }

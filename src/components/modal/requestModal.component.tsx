@@ -70,7 +70,7 @@ const RequestModal = () => {
             <p>
               <strong>Total: </strong>
               {Number(
-                userContext.requestInfo?.itens.reduce((a, b) => {
+                userContext.requestInfo?.itens?.reduce((a, b) => {
                   return a + Number(b.price);
                 }, 0)
               ).toLocaleString('pt-BR', {
@@ -85,7 +85,7 @@ const RequestModal = () => {
           </div>
 
           <ul>
-            {userContext.requestInfo?.itens.map((el) => (
+            {userContext.requestInfo?.itens?.map((el) => (
               <li key={el.id}>
                 <Image src={el.image} alt={el.name} width={45} height={45} />
                 <p>
@@ -98,6 +98,29 @@ const RequestModal = () => {
               </li>
             ))}
           </ul>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <h3 style={{ fontSize: '16px' }}>Ainda não fez o pagamento?</h3>
+            <h4>Utilize o QRCode abaixo.</h4>
+            <Image
+              src="/image/qrcode.jpg"
+              alt="QR Code"
+              width={180}
+              height={180}
+            />
+            <p>
+              <strong>Instituição: </strong>BCO C6 S.A.
+            </p>
+            <p>
+              <strong>CNPJ: </strong>47.449.484/0001-14
+            </p>
+          </div>
 
           <div>
             <button

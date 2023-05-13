@@ -3,6 +3,7 @@ import withTokenMiddleware from '@/middlewares/token.middleware';
 import { PrismaClient } from '@prisma/client';
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nodemailer from 'nodemailer';
 import * as yup from 'yup';
 
 const cors = corsMiddleware(Cors({ methods: ['PATCH'] }));
@@ -54,7 +55,54 @@ export default withTokenMiddleware(
       data: req.body,
     });
 
-    console.log(requestEdit);
+    if (requestEdit.status === 'Finalizado') {
+      requestEdit.itens.forEach(async (el) => {
+        const product = await prisma.product.findFirst({
+          where: { name: el.name },
+        });
+
+        if (!product) {
+          return res.status(400).json({ message: 'Produto não encontrado.' });
+        }
+
+        await prisma.product.update({
+          where: { id: product.id },
+          data: { stock: Number(product.stock) - Number(el.count) },
+        });
+      });
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTPHOST,
+      port: Number(process.env.SMTPPORT),
+      auth: {
+        user: process.env.SMTPUSER,
+        pass: process.env.SMTPPASSWORD,
+      },
+    });
+
+    transporter
+      .sendMail({
+        from: process.env.SMTPUSER,
+        to: userFound.email,
+        replyTo: userFound.email,
+        subject: `Status do seu pedido atualizado.`,
+        html: `<p>O status do seu pedido <strong>${
+          requestEdit.number
+        }</strong> foi atualizado para <strong>${
+          requestEdit.status
+        }</strong>.</p>
+        ${
+          requestEdit.description
+            ? '<p><strong>Descrição: </strong>' +
+              requestEdit.description +
+              '</p>'
+            : ''
+        }
+        `,
+      })
+      .then((res) => res)
+      .catch((error) => console.error(error));
 
     return res.status(200).json(requestEdit);
   }

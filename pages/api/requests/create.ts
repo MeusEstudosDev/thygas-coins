@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import Cors from 'cors';
 import { randomUUID } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nodemailer from 'nodemailer';
 import * as yup from 'yup';
 
 const cors = corsMiddleware(Cors({ methods: ['POST'] }));
@@ -77,6 +78,39 @@ export default withTokenMiddleware(
         },
       });
     });
+
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTPHOST,
+      port: Number(process.env.SMTPPORT),
+      auth: {
+        user: process.env.SMTPUSER,
+        pass: process.env.SMTPPASSWORD,
+      },
+    });
+
+    transporter
+      .sendMail({
+        from: process.env.SMTPUSER,
+        to: process.env.SMTPUSER,
+        replyTo: process.env.SMTPUSER,
+        subject: `Novo pedido na Thygas-Coins.`,
+        html: `
+        <p><strong>ID Pedido: </strong> ${newRequest.id}</p>
+        <p><strong>ID Cliente: </strong> ${newRequest.clientId}</p>
+        <p><strong>Nº Pedido: </strong> ${newRequest.number}</p>
+        <p><strong>Data: </strong> ${newRequest.createdAt}</p>
+        <p><strong>Status: </strong> ${newRequest.status}</p>
+        <p><strong>Total: </strong> ${Number(newRequest.total).toLocaleString(
+          'pt-BR',
+          {
+            style: 'currency',
+            currency: 'BRL',
+          }
+        )}</p>
+        `,
+      })
+      .then((res) => res)
+      .catch((error) => console.error(error));
 
     return res.status(201).json(newRequest);
   }

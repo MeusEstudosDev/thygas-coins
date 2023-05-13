@@ -61,7 +61,7 @@ const LoginPage = () => {
 
       localStorage.setItem('token', data.token);
 
-      router.push('/');
+      router.back();
     } catch (e: any) {
       toast.error(e.response.data.message, {
         autoClose: 5000,

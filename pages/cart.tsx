@@ -26,6 +26,11 @@ const CartPage = () => {
     router.push('/payment');
   };
 
+  const handlePatch = async () => {
+    toast.error('Você precisa estar logado.');
+    router.push('/login');
+  };
+
   React.useEffect(() => {
     const list = userContext.products.filter((el) => el.stock > 0);
 
@@ -85,8 +90,7 @@ const CartPage = () => {
                   if (userContext.user) {
                     handleFinish();
                   } else {
-                    toast.error('Você precisa estar logado.');
-                    router.push('/login');
+                    handlePatch();
                   }
                 }}
               >

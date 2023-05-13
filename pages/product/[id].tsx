@@ -20,7 +20,7 @@ const ProductPage = () => {
 
   const [product, setProduct] = React.useState<IProducts | null>(null);
 
-  const [count, setCount] = React.useState<number>(0);
+  const [count, setCount] = React.useState<number>(25);
 
   const router = useRouter();
 
@@ -38,7 +38,17 @@ const ProductPage = () => {
   const handle = async (data: IProductBuyReq) => {
     loadingContext.setLoading(true);
 
-    if (data.character) {
+    if (router.pathname === '/product/[id]') {
+      if (!data.character) {
+        loadingContext.setLoading(false);
+        return toast.error('Este char não existe.');
+      }
+
+      if (data.count === undefined || data.count <= 0) {
+        loadingContext.setLoading(false);
+        return toast.error('Você deve comprar 25 ou mais TC.');
+      }
+
       const res = await axios.get(
         `https://api.tibiadata.com/v3/character/${data.character}`
       );

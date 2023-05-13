@@ -142,7 +142,7 @@ const OrderPage = () => {
                   width: '80px',
                 }}
               >
-                {el.itens.length}
+                {el.itens?.length}
               </p>
               <p
                 style={{

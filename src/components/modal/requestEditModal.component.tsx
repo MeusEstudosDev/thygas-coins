@@ -195,7 +195,8 @@ const RequestEditModal = () => {
                   {Number(el.price).toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
-                  })}
+                  })}{' '}
+                  para <strong>{el.character}</strong>
                 </p>
               </li>
             ))}
