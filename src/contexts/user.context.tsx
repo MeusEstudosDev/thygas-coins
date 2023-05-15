@@ -76,11 +76,29 @@ interface IUserContext {
 
   filterCategories: string;
   setFilterCategories: React.Dispatch<React.SetStateAction<string>>;
+
+  randomCode: string;
+  setRandomCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const UserContext = React.createContext({} as IUserContext);
 
 const UserProvider = ({ children }: IContextProps): JSX.Element => {
+  const monthNames = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ];
+
   const loadingContext = React.useContext(LoadingContext);
 
   const [user, setUser] = React.useState<IUserRes | null>(null);
@@ -136,6 +154,12 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   const [modalContinue, setModalContinue] = React.useState<boolean>(false);
 
   const [filterCategories, setFilterCategories] = React.useState<string>('all');
+
+  const [randomCode, setRandomCode] = React.useState(
+    monthNames[new Date().getMonth()].toLowerCase() +
+      '-' +
+      Math.random().toString(36).slice(-5)
+  );
 
   const router = useRouter();
 
@@ -242,6 +266,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setModalContinue,
         filterCategories,
         setFilterCategories,
+        randomCode,
+        setRandomCode,
       }}
     >
       {children}

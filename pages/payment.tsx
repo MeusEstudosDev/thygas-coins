@@ -8,6 +8,21 @@ import React from 'react';
 import { toast } from 'react-toastify';
 
 const PaymentPage = () => {
+  const monthNames = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ];
+
   const router = useRouter();
 
   const userContext = React.useContext(UserContext);
@@ -28,17 +43,18 @@ const PaymentPage = () => {
             return a + b.price;
           }, 0)
         ),
-        status: 'Aguardando...',
+        status: 'Aguardando pagamento',
         itens: userContext.cart.map((el) => ({
           name: el.name,
           count: Number(el.count),
           price: Number(el.price),
+          description: userContext.randomCode,
           character: el.character || '',
           image: el.image,
         })),
       };
 
-      const request = await toast.promise(
+      await toast.promise(
         axios.post(
           '/api/requests/create',
           { ...newRequest },
@@ -63,6 +79,11 @@ const PaymentPage = () => {
         className: 'my-toast-error',
       });
     } finally {
+      userContext.setRandomCode(
+        monthNames[new Date().getMonth()].toLowerCase() +
+          '-' +
+          Math.random().toString(36).slice(-5)
+      );
       loadingContext.setLoading(false);
     }
   };
@@ -120,6 +141,11 @@ const PaymentPage = () => {
           <p>
             Se o nome estiver errado por favor altere antes de confirmar o
             pagamento.
+          </p>
+
+          <p>
+            Para agilizar informe o código{' '}
+            <strong>{userContext.randomCode}</strong> na descrição do pagamento.
           </p>
 
           <button onClick={() => handleFinish()}>Confirmar pagamento</button>

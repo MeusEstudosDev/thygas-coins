@@ -38,7 +38,6 @@ export const StyledHome = styled.main`
       border: 1px solid var(--color-grey-7);
       padding: 0.4rem;
       border-radius: 0.4rem;
-      background-color: var(--color-secundary);
 
       > h2 {
         font-size: 1.4rem;
@@ -57,7 +56,7 @@ export const StyledHome = styled.main`
       }
 
       :hover {
-        background-color: var(--color-primary);
+        background-color: var(--color-hover);
         filter: brightness(1.1);
         border: 1px solid var(--color-grey-0);
       }

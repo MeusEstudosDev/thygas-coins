@@ -5,7 +5,7 @@ export const StyledModal = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   min-width: 40rem;
   background-color: #00000099;
   color: var(--color-third);

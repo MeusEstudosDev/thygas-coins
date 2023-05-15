@@ -51,7 +51,7 @@ export default withTokenMiddleware(
 
     const requestEdit = await prisma.request.update({
       where: { id: id?.toString() },
-      include: { itens: true },
+      include: { itens: true, client: true },
       data: req.body,
     });
 
@@ -84,8 +84,8 @@ export default withTokenMiddleware(
     transporter
       .sendMail({
         from: process.env.SMTPUSER,
-        to: userFound.email,
-        replyTo: userFound.email,
+        to: requestEdit.client.email,
+        replyTo: requestEdit.client.email,
         subject: `Status do seu pedido atualizado.`,
         html: `<p>O status do seu pedido <strong>${
           requestEdit.number

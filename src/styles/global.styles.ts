@@ -70,6 +70,8 @@ const StyledGlobal = createGlobalStyle`
 
         --color-secundary: #f2fff3;
 
+        --color-hover: #b5ffc7;
+
         .my-toast {
             margin-top: 2rem;
             font-size: 1.6rem;
