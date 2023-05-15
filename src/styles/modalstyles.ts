@@ -5,7 +5,7 @@ export const StyledModal = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   min-width: 40rem;
   background-color: #00000099;
   color: var(--color-third);
@@ -23,8 +23,23 @@ export const StyledModal = styled.div`
   > section {
     background-color: var(--color-grey-9);
     padding: 1.2rem;
+    max-height: 90vh;
+    overflow: auto;
     border-radius: 0.6rem;
     border: 0.2rem solid var(--color-fourth);
+
+    &::-webkit-scrollbar {
+      width: 0.6rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 5px;
+    }
 
     > form {
       width: 30.9rem;

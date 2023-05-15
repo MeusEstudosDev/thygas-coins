@@ -80,8 +80,8 @@ export default async function handle(
   transporter
     .sendMail({
       from: process.env.SMTPUSER,
-      to: newUser.email,
-      replyTo: newUser.email,
+      to: email,
+      replyTo: email,
       subject: 'Cadastro realizado com sucesso - thygas-coins',
       html: `
       <p>Agradecemos sua preferência.</p>

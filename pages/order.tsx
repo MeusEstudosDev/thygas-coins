@@ -18,7 +18,7 @@ const OrderPage = () => {
   };
 
   React.useEffect(() => {
-    if (userContext.user) {
+    if (userContext.user && !userContext.requests) {
       loadingContext.setLoading(true);
 
       const getRequests = async () => {
@@ -30,8 +30,6 @@ const OrderPage = () => {
           const { data } = await axios.get('/api/requests/list', {
             headers: { Authorization: 'Bearer ' + token },
           });
-
-          console.log(data);
 
           userContext.setRequests(data);
         } catch (e: any) {

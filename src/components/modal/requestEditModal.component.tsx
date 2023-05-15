@@ -154,6 +154,11 @@ const RequestEditModal = () => {
             <br />
 
             <p>
+              <strong>Nome: </strong>
+              {userContext.requestInfo?.client.name}
+            </p>
+
+            <p>
               <strong>Total: </strong>
               {Number(
                 userContext.requestInfo?.itens?.reduce((a, b) => {

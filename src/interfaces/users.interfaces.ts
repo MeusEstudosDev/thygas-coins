@@ -4,6 +4,7 @@ export interface IUserRes {
   email: string;
   registered_at: Date;
   isAdmin: boolean;
+  soft_delete: boolean;
 }
 
 export interface IUserEdit {

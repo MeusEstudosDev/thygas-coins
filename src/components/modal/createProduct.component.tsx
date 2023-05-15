@@ -6,6 +6,7 @@ import { StyledInput } from '@/styles/input.styles';
 import { StyledLabel } from '@/styles/label.styles';
 import { StyledModal } from '@/styles/modalstyles';
 import { StyledSelect } from '@/styles/select.styles';
+import { StyledTextarea } from '@/styles/textarea.styles';
 import { TitleH2 } from '@/styles/typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -181,11 +182,10 @@ const CreateProductModal = () => {
           </div>
 
           <div>
-            <StyledInput
+            <StyledTextarea
               {...register('description')}
               id="description"
               name="description"
-              type="text"
               placeholder=" "
             />
             <StyledLabel>Descrição</StyledLabel>

@@ -63,8 +63,12 @@ export default async function handle(
       from: process.env.SMTPUSER,
       to: user.email,
       replyTo: user.email,
-      subject: 'Sua nova senha chegou!',
-      html: `<p><strong>Senha: </strong>${password}</p>`,
+      subject: 'Sua nova senha chegou! - thygas-coins',
+      html: `
+      <p><strong>Senha: </strong>${password}</p>
+      <br>
+      <p>Dúvidas entrar em contato com nosso suporte <a href="https://api.whatsapp.com/send?phone=+55++5532998274714&text=Ol%C3%A1...">whatsapp</a></p>
+      `,
     })
     .then((res) => res)
     .catch((error) => console.error(error));

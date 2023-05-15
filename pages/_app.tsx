@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
           {loadingContext.loading && <LoadingComponent />}
           <HeaderComponent />
           <Component {...pageProps} />
-          {/* <FooterComponent /> */}
+          <FooterComponent />
         </UserProvider>
       </LoadingProvider>
     </>

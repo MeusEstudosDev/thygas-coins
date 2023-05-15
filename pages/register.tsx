@@ -45,7 +45,8 @@ const RegisterPage = () => {
         axios.post('/api/users/create', { name, email }),
         {
           pending: 'Aguardando...',
-          success: 'Cadastro criado com sucesso.',
+          success:
+            'Cadastro criado com sucesso, você recebera um email com a senha.',
         },
         {
           className: 'my-toast-sucess',

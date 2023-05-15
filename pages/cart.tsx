@@ -1,4 +1,3 @@
-import { LoadingContext } from '@/contexts/loading.context';
 import { UserContext } from '@/contexts/user.context';
 import { IProducts } from '@/interfaces/products.interfaces';
 import { StyledCart } from '@/styles/pageCart.styles';
@@ -13,9 +12,8 @@ const CartPage = () => {
 
   const userContext = React.useContext(UserContext);
 
-  const loadingContext = React.useContext(LoadingContext);
-
   const [filter, setFilter] = React.useState<IProducts[]>();
+
   const handleDelete = (id: number) => {
     const cartList = userContext.cart.filter((el) => el.id !== id);
 
@@ -51,7 +49,8 @@ const CartPage = () => {
 
                   <p>
                     <strong>
-                      {el.count} {el.name}
+                      {el.name.toLowerCase() === 'tibia coins' && el.count}{' '}
+                      {el.name}
                     </strong>{' '}
                     por{' '}
                     <strong>
@@ -103,14 +102,14 @@ const CartPage = () => {
             <h3>Seu carrinho está vazio, vamos comprar algo?</h3>
             <span>
               <ul>
-                {filter?.map((el) => (
+                {userContext.categories.map((el) => (
                   <li
                     key={el.id}
                     onClick={() => {
-                      router.push(`/product/${el.id}`);
+                      userContext.setFilterCategories(el.id);
+                      router.push('/');
                     }}
                   >
-                    <h2>{el.name}</h2>
                     <Image
                       src={el.image}
                       alt={el.name}

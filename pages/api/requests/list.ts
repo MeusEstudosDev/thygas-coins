@@ -28,9 +28,25 @@ export default withTokenMiddleware(
       const requests = await prisma.request.findMany({
         include: {
           itens: true,
+          client: true,
         },
       });
-      return res.status(200).json(requests);
+
+      const returnRequests = requests.map((el) => {
+        return {
+          ...el,
+          client: {
+            email: el.client.email,
+            id: el.client.id,
+            isAdmin: el.client.isAdmin,
+            name: el.client.name,
+            registered_at: el.client.registered_at,
+            soft_delete: el.client.soft_delete,
+          },
+        };
+      });
+
+      return res.status(200).json(returnRequests);
     }
 
     const requests = await prisma.request.findMany({
@@ -39,9 +55,24 @@ export default withTokenMiddleware(
       },
       include: {
         itens: true,
+        client: true,
       },
     });
 
-    return res.status(200).json(requests);
+    const returnRequests = requests.map((el) => {
+      return {
+        ...el,
+        client: {
+          email: el.client.email,
+          id: el.client.id,
+          isAdmin: el.client.isAdmin,
+          name: el.client.name,
+          registered_at: el.client.registered_at,
+          soft_delete: el.client.soft_delete,
+        },
+      };
+    });
+
+    return res.status(200).json(returnRequests);
   }
 );

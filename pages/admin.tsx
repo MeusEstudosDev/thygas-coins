@@ -229,7 +229,14 @@ const AdminPage = () => {
                   {el.stock}
                 </p>
                 <Image src={el.image} alt={el.name} width={180} height={180} />
-                <p>
+                <p
+                  style={{
+                    width: '100%',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
                   <strong>Descrição: </strong>
                   {el.description}
                 </p>

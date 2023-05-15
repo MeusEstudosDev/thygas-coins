@@ -120,6 +120,25 @@ const RequestModal = () => {
             <p>
               <strong>CNPJ: </strong>47.449.484/0001-14
             </p>
+
+            <br />
+
+            <p>
+              <strong style={{ color: 'red' }}>IMPORTANTE</strong>
+            </p>
+
+            <p>
+              <strong>Você precisa enviar o pagamento com este nome: </strong>
+            </p>
+
+            <p style={{ textDecoration: 'underline' }}>
+              {userContext.user?.name}
+            </p>
+
+            <p>
+              Se o nome estiver errado por favor altere antes de confirmar o
+              pagamento.
+            </p>
           </div>
 
           <div>

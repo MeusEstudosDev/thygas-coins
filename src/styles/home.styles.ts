@@ -22,7 +22,12 @@ export const StyledHome = styled.main`
     padding: 4rem 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 3rem;
+    gap: 1rem;
+    justify-content: center;
+
+    @media (min-width: 1100px) {
+      justify-content: flex-start;
+    }
 
     > li {
       cursor: pointer;

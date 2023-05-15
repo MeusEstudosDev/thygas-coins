@@ -73,6 +73,9 @@ interface IUserContext {
 
   modalContinue: boolean;
   setModalContinue: React.Dispatch<React.SetStateAction<boolean>>;
+
+  filterCategories: string;
+  setFilterCategories: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const UserContext = React.createContext({} as IUserContext);
@@ -131,6 +134,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
     React.useState<boolean>(false);
 
   const [modalContinue, setModalContinue] = React.useState<boolean>(false);
+
+  const [filterCategories, setFilterCategories] = React.useState<string>('all');
 
   const router = useRouter();
 
@@ -235,6 +240,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setModalRequestEdit,
         modalContinue,
         setModalContinue,
+        filterCategories,
+        setFilterCategories,
       }}
     >
       {children}

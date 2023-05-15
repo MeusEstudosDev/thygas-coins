@@ -5,6 +5,7 @@ import { StyledFormError } from '@/styles/formError.styles';
 import { StyledInput } from '@/styles/input.styles';
 import { StyledLabel } from '@/styles/label.styles';
 import { StyledModal } from '@/styles/modalstyles';
+import { StyledTextarea } from '@/styles/textarea.styles';
 import { TitleH2 } from '@/styles/typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -172,11 +173,10 @@ const EditProductModal = () => {
           </div>
 
           <div>
-            <StyledInput
+            <StyledTextarea
               {...register('description')}
               id="description"
               name="description"
-              type="text"
               placeholder=" "
               value={userContext.productInfo?.description}
               onChange={(event) => {

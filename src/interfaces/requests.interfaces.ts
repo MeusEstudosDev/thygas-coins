@@ -1,3 +1,5 @@
+import { IUserRes } from "./users.interfaces";
+
 export interface IRequests {
   id: string;
   number: string;
@@ -6,6 +8,7 @@ export interface IRequests {
   description?: string;
   createdAt: Date;
   clientId: string;
+  client: IUserRes;
   itens: IRequestsItens[];
 }
 

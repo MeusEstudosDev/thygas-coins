@@ -90,6 +90,7 @@ export const StyledCart = styled.main`
     }
 
     > span {
+      margin-top: 5rem;
       > ul {
         display: flex;
         gap: 2rem;
@@ -102,6 +103,9 @@ export const StyledCart = styled.main`
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          border: 1px solid var(--color-grey-7);
+          border-radius: 0.4rem;
+          background-color: var(--color-secundary);
 
           > h2 {
             max-width: 18rem;

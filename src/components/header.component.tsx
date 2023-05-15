@@ -1,6 +1,7 @@
 import { UserContext } from '@/contexts/user.context';
 import { StyledHeader } from '@/styles/header.styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from '@mui/icons-material/Home';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { useRouter } from 'next/router';
@@ -11,21 +12,28 @@ const HeaderComponent = () => {
 
   const router = useRouter();
 
-  const [search, setSearch] = React.useState('all');
-
   return (
     <StyledHeader>
       <div>
         <h2 onClick={() => router.push('/')}>Thygas Coins</h2>
-        <form action="">
-          <input
-            type="text"
-            value={userContext.homeSearch}
-            placeholder="Procurar produto..."
-            onChange={(e) => userContext.setHomeSearch(e.target.value)}
-          />
-        </form>
+        {router.pathname === '/' && (
+          <form action="">
+            <input
+              type="text"
+              value={userContext.homeSearch}
+              placeholder="Procurar produto..."
+              onChange={(e) => userContext.setHomeSearch(e.target.value)}
+            />
+          </form>
+        )}
+
         <nav>
+          {router.pathname !== '/' && (
+            <span onClick={() => router.push('/')}>
+              <HomeIcon fontSize="large" color="success" />
+              <p>Início</p>
+            </span>
+          )}
           <span
             onClick={() => {
               if (userContext.user) {

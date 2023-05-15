@@ -11,14 +11,13 @@ const HomePage = () => {
 
   const router = useRouter();
 
-  const [filterCategories, setFilterCategories] = React.useState('all');
 
   const [filter, setFilter] = React.useState<IProducts[]>();
 
   React.useEffect(() => {
     const list = userContext.products.filter((el) => el.stock > 0);
 
-    if (filterCategories === 'all' && userContext.homeSearch === '') {
+    if (userContext.filterCategories === 'all' && userContext.homeSearch === '') {
       return setFilter(list);
     }
 
@@ -40,21 +39,21 @@ const HomePage = () => {
           return el;
         }
       } else {
-        if (el.categoryId === filterCategories) return el;
+        if (el.categoryId === userContext.filterCategories) return el;
       }
     });
 
     setFilter(filterProducts);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userContext.products, filterCategories, userContext.homeSearch]);
+  }, [userContext.products, userContext.filterCategories, userContext.homeSearch]);
 
   return (
     <StyledHome>
       {userContext.homeSearch === '' ? (
         <div>
           <StyledSelect
-            onChange={(e) => setFilterCategories(e.target.value)}
-            value={filterCategories}
+            onChange={(e) => userContext.setFilterCategories(e.target.value)}
+            value={userContext.filterCategories}
           >
             <option value="all">Todas categorias</option>
             {userContext.categories.map((el) => (
@@ -68,7 +67,7 @@ const HomePage = () => {
         <div>
           <button
             onClick={() => {
-              setFilterCategories('all');
+              userContext.setFilterCategories('all');
               userContext.setHomeSearch('');
             }}
           >
@@ -78,9 +77,9 @@ const HomePage = () => {
       )}
 
       <ul>
-        {filterCategories === 'all' && userContext.homeSearch === ''
+        {userContext.filterCategories === 'all' && userContext.homeSearch === ''
           ? userContext.categories.map((el) => (
-              <li key={el.id} onClick={() => setFilterCategories(el.id)}>
+              <li key={el.id} onClick={() => userContext.setFilterCategories(el.id)}>
                 <Image src={el.image} alt={el.name} width={180} height={180} />
               </li>
             ))

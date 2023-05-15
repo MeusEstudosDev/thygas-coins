@@ -137,7 +137,6 @@ const ProductPage = () => {
             />
           )}
         </div>
-
         <div style={{ width: '100%' }}>
           <h2>
             {product?.name ? product?.name + ' - ' : 'carregando...'}
