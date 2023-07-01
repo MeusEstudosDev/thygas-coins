@@ -170,7 +170,7 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
 
     localStorage.removeItem('token');
 
-    router.push('/');
+    // router.push('/');
   };
 
   React.useEffect(() => {

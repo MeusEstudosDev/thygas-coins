@@ -77,7 +77,7 @@ export default withTokenMiddleware(
           requestId: newRequest.id,
         },
       });
-    });
+    }); 
 
     const transporter = nodemailer.createTransport({
       host: process.env.SMTPHOST,

@@ -1,9 +1,9 @@
-import { StyledFooter } from '@/styles/footer.styles';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { StyledFooter } from '@/styles/footer.styles'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const FooterComponent = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <StyledFooter>
@@ -22,7 +22,7 @@ const FooterComponent = () => {
           <h2>Marketing</h2>
           <nav>
             <Link
-              href="https://api.whatsapp.com/send?phone=+55++5532998274714&text=Quero vender tibia coins"
+              href="https://api.whatsapp.com/send?phone=+55++5532999730864&text=Quero vender tibia coins"
               target="_blank"
             >
               Compramos suas Tibia Coins
@@ -41,7 +41,7 @@ const FooterComponent = () => {
             </Link>
 
             <Link
-              href="https://api.whatsapp.com/send?phone=+55++5532998274714&text=Ol%C3%A1..."
+              href="https://api.whatsapp.com/send?phone=+55++5532999730864&text=Ol%C3%A1..."
               target="_blank"
             >
               Whatsapp
@@ -50,7 +50,7 @@ const FooterComponent = () => {
         </section>
       </div>
     </StyledFooter>
-  );
-};
+  )
+}
 
-export default FooterComponent;
+export default FooterComponent

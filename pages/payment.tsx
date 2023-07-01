@@ -1,11 +1,11 @@
-import { LoadingContext } from '@/contexts/loading.context';
-import { UserContext } from '@/contexts/user.context';
-import { StyledPayment } from '@/styles/pagePayment.styles';
-import axios from 'axios';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { toast } from 'react-toastify';
+import { LoadingContext } from '@/contexts/loading.context'
+import { UserContext } from '@/contexts/user.context'
+import { StyledPayment } from '@/styles/pagePayment.styles'
+import axios from 'axios'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { toast } from 'react-toastify'
 
 const PaymentPage = () => {
   const monthNames = [
@@ -21,26 +21,26 @@ const PaymentPage = () => {
     'Outubro',
     'Novembro',
     'Dezembro',
-  ];
+  ]
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const loadingContext = React.useContext(LoadingContext);
+  const loadingContext = React.useContext(LoadingContext)
 
   const handleFinish = async () => {
-    loadingContext.setLoading(true);
+    loadingContext.setLoading(true)
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
 
-      if (!token) return userContext.userLogout();
+      if (!token) return userContext.userLogout()
 
       const newRequest = {
         total: Number(
           userContext.cart.reduce((a, b) => {
-            return a + b.price;
+            return a + b.price
           }, 0)
         ),
         status: 'Aguardando pagamento',
@@ -52,7 +52,7 @@ const PaymentPage = () => {
           character: el.character || '',
           image: el.image,
         })),
-      };
+      }
 
       await toast.promise(
         axios.post(
@@ -68,30 +68,32 @@ const PaymentPage = () => {
           className: 'my-toast-sucess',
           autoClose: 5000,
         }
-      );
+      )
 
-      userContext.setCart([]);
+      userContext.setCart([])
 
-      router.push('/order');
+      router.push('/order')
     } catch (e: any) {
       toast.error(e.response.data.message, {
         autoClose: 5000,
         className: 'my-toast-error',
-      });
+      })
     } finally {
       userContext.setRandomCode(
         monthNames[new Date().getMonth()].toLowerCase() +
           '-' +
+          `${new Date().getFullYear()}` +
+          '-' +
           Math.random().toString(36).slice(-5)
-      );
-      loadingContext.setLoading(false);
+      )
+      loadingContext.setLoading(false)
     }
-  };
+  }
 
   React.useEffect(() => {
-    if (userContext.cart.length === 0) router.push('/');
+    if (userContext.cart.length === 0) router.push('/')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   return (
     <StyledPayment>
@@ -101,7 +103,7 @@ const PaymentPage = () => {
           <span style={{ color: 'black' }}>
             {Number(
               userContext.cart.reduce((a, b) => {
-                return a + b.price;
+                return a + b.price
               }, 0)
             ).toLocaleString('pt-BR', {
               style: 'currency',
@@ -179,7 +181,7 @@ const PaymentPage = () => {
         </ul>
       </section>
     </StyledPayment>
-  );
-};
+  )
+}
 
-export default PaymentPage;
+export default PaymentPage

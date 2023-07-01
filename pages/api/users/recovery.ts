@@ -1,23 +1,23 @@
-import { corsMiddleware } from '@/middlewares/cors.middleware';
-import { PrismaClient } from '@prisma/client';
-import { hashSync } from 'bcryptjs';
-import Cors from 'cors';
-import { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer from 'nodemailer';
-import * as yup from 'yup';
+import { corsMiddleware } from '@/middlewares/cors.middleware'
+import { PrismaClient } from '@prisma/client'
+import { hashSync } from 'bcryptjs'
+import Cors from 'cors'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nodemailer from 'nodemailer'
+import * as yup from 'yup'
 
-const cors = corsMiddleware(Cors({ methods: ['PATCH'] }));
+const cors = corsMiddleware(Cors({ methods: ['PATCH'] }))
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await cors(req, res);
+  await cors(req, res)
 
   if (req.method !== 'PATCH')
-    return res.status(405).json({ message: 'Método não permitido' });
+    return res.status(405).json({ message: 'Método não permitido' })
 
   try {
     await yup
@@ -28,26 +28,26 @@ export default async function handle(
       .validate(req.body, {
         stripUnknown: true,
         abortEarly: false,
-      });
+      })
   } catch ({ message }: any) {
-    return res.status(400).json({ message });
+    return res.status(400).json({ message })
   }
 
-  const { email } = req.body;
+  const { email } = req.body
 
   const emailFound = await prisma.user.findFirst({
     where: { email },
-  });
+  })
 
   if (!emailFound)
-    return res.status(404).json({ message: 'Email não cadastrado.' });
+    return res.status(404).json({ message: 'Email não cadastrado.' })
 
-  const password = Math.random().toString(36).slice(-10);
+  const password = Math.random().toString(36).slice(-10)
 
   const user = await prisma.user.update({
     where: { email },
     data: { password: hashSync(password, 10) },
-  });
+  })
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTPHOST,
@@ -56,7 +56,7 @@ export default async function handle(
       user: process.env.SMTPUSER,
       pass: process.env.SMTPPASSWORD,
     },
-  });
+  })
 
   transporter
     .sendMail({
@@ -67,11 +67,11 @@ export default async function handle(
       html: `
       <p><strong>Senha: </strong>${password}</p>
       <br>
-      <p>Dúvidas entrar em contato com nosso suporte <a href="https://api.whatsapp.com/send?phone=+55++5532998274714&text=Ol%C3%A1...">whatsapp</a></p>
+      <p>Dúvidas entrar em contato com nosso suporte <a href="https://api.whatsapp.com/send?phone=+55++5532999730864&text=Ol%C3%A1...">whatsapp</a></p>
       `,
     })
     .then((res) => res)
-    .catch((error) => console.error(error));
+    .catch((error) => console.error(error))
 
-  return res.status(200).json({ message: 'Nova senha enviada por email.' });
+  return res.status(200).json({ message: 'Nova senha enviada por email.' })
 }

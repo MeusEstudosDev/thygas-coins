@@ -1,26 +1,26 @@
-import { ICreateUser } from '@/interfaces/session.interfaces';
-import { UserRes } from '@/mappers/users';
-import { corsMiddleware } from '@/middlewares/cors.middleware';
-import { PrismaClient } from '@prisma/client';
-import { hashSync } from 'bcryptjs';
-import Cors from 'cors';
-import { randomUUID } from 'crypto';
-import { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer from 'nodemailer';
-import * as yup from 'yup';
+import { ICreateUser } from '@/interfaces/session.interfaces'
+import { UserRes } from '@/mappers/users'
+import { corsMiddleware } from '@/middlewares/cors.middleware'
+import { PrismaClient } from '@prisma/client'
+import { hashSync } from 'bcryptjs'
+import Cors from 'cors'
+import { randomUUID } from 'crypto'
+import { NextApiRequest, NextApiResponse } from 'next'
+import nodemailer from 'nodemailer'
+import * as yup from 'yup'
 
-const cors = corsMiddleware(Cors({ methods: ['POST'] }));
+const cors = corsMiddleware(Cors({ methods: ['POST'] }))
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await cors(req, res);
+  await cors(req, res)
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    return res.status(405).json({ message: 'Method not allowed' })
   }
 
   try {
@@ -33,30 +33,30 @@ export default async function handle(
       .validate(req.body, {
         stripUnknown: true,
         abortEarly: false,
-      });
+      })
 
-    req.body = validatedBody;
+    req.body = validatedBody
   } catch ({ message }: any) {
-    return res.status(400).json({ message });
+    return res.status(400).json({ message })
   }
 
-  const { name, email }: ICreateUser = req.body;
+  const { name, email }: ICreateUser = req.body
 
   const emailFound = await prisma.user.findFirst({
     where: { email },
-  });
+  })
 
   if (emailFound) {
-    return res.status(400).json({ message: 'Email já cadastrado.' });
+    return res.status(400).json({ message: 'Email já cadastrado.' })
   }
 
-  let isAdmin = false;
+  let isAdmin = false
 
-  const password = Math.random().toString(36).slice(-10);
+  const password = Math.random().toString(36).slice(-10)
 
-  const usersCount = await prisma.user.count();
+  const usersCount = await prisma.user.count()
 
-  if (usersCount === 0) isAdmin = true;
+  if (usersCount === 0) isAdmin = true
 
   const newUser = await prisma.user.create({
     data: {
@@ -66,7 +66,7 @@ export default async function handle(
       password: hashSync(password, 10),
       isAdmin,
     },
-  });
+  })
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTPHOST,
@@ -75,7 +75,7 @@ export default async function handle(
       user: process.env.SMTPUSER,
       pass: process.env.SMTPPASSWORD,
     },
-  });
+  })
 
   transporter
     .sendMail({
@@ -87,13 +87,13 @@ export default async function handle(
       <p>Agradecemos sua preferência.</p>
       <p><strong>Sua senha: </strong>${password}</p>
       <br>
-      <p>Dúvidas entrar em contato com nosso suporte <a href="https://api.whatsapp.com/send?phone=+55++5532998274714&text=Ol%C3%A1...">whatsapp</a></p>
+      <p>Dúvidas entrar em contato com nosso suporte <a href="https://api.whatsapp.com/send?phone=+55++5532999730864&text=Ol%C3%A1...">whatsapp</a></p>
       `,
     })
     .then((res) => res)
-    .catch((error) => console.error(error));
+    .catch((error) => console.error(error))
 
-  const user = UserRes.handle(newUser);
+  const user = UserRes.handle(newUser)
 
-  return res.status(201).json(user);
+  return res.status(201).json(user)
 }
