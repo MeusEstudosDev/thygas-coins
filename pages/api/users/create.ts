@@ -1,5 +1,4 @@
 import { ICreateUser } from '@/interfaces/session.interfaces'
-import { UserRes } from '@/mappers/users'
 import { corsMiddleware } from '@/middlewares/cors.middleware'
 import { PrismaClient } from '@prisma/client'
 import { hashSync } from 'bcryptjs'
@@ -42,58 +41,63 @@ export default async function handle(
 
   const { name, email }: ICreateUser = req.body
 
-  const emailFound = await prisma.user.findFirst({
-    where: { email },
-  })
+  prisma.$transaction(async (tx) => {
+    if (await tx.user.findUnique({ where: { email } })) {
+      return res.status(400).json({ message: 'Email já cadastrado.' })
+    }
 
-  if (emailFound) {
-    return res.status(400).json({ message: 'Email já cadastrado.' })
-  }
+    const password = Math.random().toString(36).slice(-10)
 
-  let isAdmin = false
+    const newUser = await tx.user.create({
+      data: {
+        id: randomUUID(),
+        email,
+        name,
+        password: hashSync(password, 10),
+        isAdmin: (await tx.user.count()) === 0 ? true : false,
+      },
+    })
 
-  const password = Math.random().toString(36).slice(-10)
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTPHOST,
+      port: Number(process.env.SMTPPORT),
+      auth: {
+        user: process.env.SMTPUSER,
+        pass: process.env.SMTPPASSWORD,
+      },
+    })
 
-  const usersCount = await prisma.user.count()
-
-  if (usersCount === 0) isAdmin = true
-
-  const newUser = await prisma.user.create({
-    data: {
-      id: randomUUID(),
-      email,
-      name,
-      password: hashSync(password, 10),
-      isAdmin,
-    },
-  })
-
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTPHOST,
-    port: Number(process.env.SMTPPORT),
-    auth: {
-      user: process.env.SMTPUSER,
-      pass: process.env.SMTPPASSWORD,
-    },
-  })
-
-  transporter
-    .sendMail({
-      from: process.env.SMTPUSER,
-      to: email,
-      replyTo: email,
-      subject: 'Cadastro realizado com sucesso - thygas-coins',
-      html: `
+    transporter
+      .sendMail({
+        from: process.env.SMTPUSER,
+        to: email,
+        replyTo: email,
+        subject: 'Cadastro realizado com sucesso - thygas-coins',
+        html: `
       <p>Agradecemos sua preferência.</p>
       <p><strong>Sua senha: </strong>${password}</p>
       <br>
       <p>Dúvidas entrar em contato com nosso suporte <a href="https://api.whatsapp.com/send?phone=+55++5532999730864&text=Ol%C3%A1...">whatsapp</a></p>
       `,
-    })
-    .then((res) => res)
-    .catch((error) => console.error(error))
+      })
+      .then((res) => res)
+      .catch((error) => console.error(error))
 
-  const user = UserRes.handle(newUser)
+    const user = await yup
+      .object()
+      .shape({
+        id: yup.string().uuid(),
+        name: yup.string(),
+        email: yup.string().email(),
+        registered_at: yup.date(),
+        isAdmin: yup.boolean(),
+        soft_delete: yup.boolean(),
+      })
+      .validate(newUser, {
+        stripUnknown: true,
+        abortEarly: false,
+      })
 
-  return res.status(201).json(user)
+    return res.status(201).json(user)
+  })
 }

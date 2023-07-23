@@ -120,10 +120,10 @@ const PaymentPage = () => {
             height={180}
           />
           <p>
-            <strong>Instituição: </strong>BCO C6 S.A.
+            <strong>Instituição: </strong>BCO DO BRASIL S.A.
           </p>
           <p>
-            <strong>CNPJ: </strong>47.449.484/0001-14
+            <strong>CPF: </strong>09089416684
           </p>
 
           <br />
