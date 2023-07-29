@@ -1,25 +1,25 @@
-import { LoadingContext } from '@/contexts/loading.context';
-import { UserContext } from '@/contexts/user.context';
-import { ICreateUser } from '@/interfaces/session.interfaces';
-import { StyledFormError } from '@/styles/formError.styles';
-import { StyledInput } from '@/styles/input.styles';
-import { StyledLabel } from '@/styles/label.styles';
-import { StyledSession } from '@/styles/session.styles';
-import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import * as yup from 'yup';
+import { LoadingContext } from '@/contexts/loading.context'
+import { UserContext } from '@/contexts/user.context'
+import { ICreateUser } from '@/interfaces/session.interfaces'
+import { StyledFormError } from '@/styles/formError.styles'
+import { StyledInput } from '@/styles/input.styles'
+import { StyledLabel } from '@/styles/label.styles'
+import { StyledSession } from '@/styles/session.styles'
+import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import * as yup from 'yup'
 
 const RegisterPage = () => {
-  const loadingContext = React.useContext(LoadingContext);
+  const loadingContext = React.useContext(LoadingContext)
 
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     register,
@@ -35,10 +35,10 @@ const RegisterPage = () => {
           .required('e-mail é obrigatório.'),
       })
     ),
-  });
+  })
 
   const handle = async ({ name, email }: ICreateUser) => {
-    loadingContext.setLoading(true);
+    loadingContext.setLoading(true)
 
     try {
       await toast.promise(
@@ -52,22 +52,22 @@ const RegisterPage = () => {
           className: 'my-toast-sucess',
           autoClose: 10000,
         }
-      );
+      )
 
-      router.push('/login');
+      router.push('/login')
     } catch ({ response }: any) {
       toast.error(response.data.message, {
         autoClose: 5000,
         className: 'my-toast-error',
-      });
+      })
     } finally {
-      loadingContext.setLoading(false);
+      loadingContext.setLoading(false)
     }
-  };
+  }
 
   React.useEffect(() => {
-    if (userContext.user) router.push('/');
-  }, [router, userContext.user]);
+    if (userContext.user) router.push('/')
+  }, [router, userContext.user])
 
   return (
     <>
@@ -110,7 +110,7 @@ const RegisterPage = () => {
         </form>
       </StyledSession>
     </>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage

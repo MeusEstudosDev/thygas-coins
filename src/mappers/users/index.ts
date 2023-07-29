@@ -1,5 +1,5 @@
-import { IUserRes } from '@/interfaces/users.interfaces';
-import { User } from '@prisma/client';
+import { IUserRes } from '@/interfaces/users.interfaces'
+import { User } from '@prisma/client'
 
 export class UserRes {
   static handle({
@@ -17,6 +17,6 @@ export class UserRes {
       registered_at,
       isAdmin,
       soft_delete,
-    };
+    }
   }
 }

@@ -1,4 +1,5 @@
 import { ICreateUser } from '@/interfaces/session.interfaces'
+import { UserRes } from '@/mappers/users'
 import { corsMiddleware } from '@/middlewares/cors.middleware'
 import { PrismaClient } from '@prisma/client'
 import { hashSync } from 'bcryptjs'
@@ -16,39 +17,41 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await cors(req, res)
+  return await prisma.$transaction(async (tx) => {
+    await cors(req, res)
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
+    if (req.method !== 'POST') {
+      return res.status(405).json({ message: 'Method not allowed' })
+    }
 
-  try {
-    const validatedBody = await yup
-      .object()
-      .shape({
-        name: yup.string().min(3).max(25).required(),
-        email: yup.string().email().required(),
-      })
-      .validate(req.body, {
-        stripUnknown: true,
-        abortEarly: false,
-      })
+    try {
+      const validatedBody = await yup
+        .object()
+        .shape({
+          name: yup.string().min(3).max(25).required(),
+          email: yup.string().email().required(),
+        })
+        .validate(req.body, {
+          stripUnknown: true,
+          abortEarly: false,
+        })
 
-    req.body = validatedBody
-  } catch ({ message }: any) {
-    return res.status(400).json({ message })
-  }
+      req.body = validatedBody
+    } catch ({ message }: any) {
+      return res.status(400).json({ message })
+    }
 
-  const { name, email }: ICreateUser = req.body
+    const { name, email }: ICreateUser = req.body
 
-  prisma.$transaction(async (tx) => {
-    if (await tx.user.findUnique({ where: { email } })) {
+    const userFound = await tx.user.findUnique({ where: { email } })
+
+    if (userFound) {
       return res.status(400).json({ message: 'Email já cadastrado.' })
     }
 
     const password = Math.random().toString(36).slice(-10)
 
-    const newUser = await tx.user.create({
+    const userCreate = await tx.user.create({
       data: {
         id: randomUUID(),
         email,
@@ -83,20 +86,7 @@ export default async function handle(
       .then((res) => res)
       .catch((error) => console.error(error))
 
-    const user = await yup
-      .object()
-      .shape({
-        id: yup.string().uuid(),
-        name: yup.string(),
-        email: yup.string().email(),
-        registered_at: yup.date(),
-        isAdmin: yup.boolean(),
-        soft_delete: yup.boolean(),
-      })
-      .validate(newUser, {
-        stripUnknown: true,
-        abortEarly: false,
-      })
+    const user = UserRes.handle(userCreate)
 
     return res.status(201).json(user)
   })

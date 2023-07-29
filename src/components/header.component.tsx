@@ -1,16 +1,16 @@
-import { UserContext } from '@/contexts/user.context';
-import { StyledHeader } from '@/styles/header.styles';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HomeIcon from '@mui/icons-material/Home';
-import RequestPageIcon from '@mui/icons-material/RequestPage';
-import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import { useRouter } from 'next/router';
-import React from 'react';
+import { UserContext } from '@/contexts/user.context'
+import { StyledHeader } from '@/styles/header.styles'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import HomeIcon from '@mui/icons-material/Home'
+import RequestPageIcon from '@mui/icons-material/RequestPage'
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
+import { useRouter } from 'next/router'
+import React from 'react'
 
 const HeaderComponent = () => {
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <StyledHeader>
@@ -37,9 +37,9 @@ const HeaderComponent = () => {
           <span
             onClick={() => {
               if (userContext.user) {
-                router.push('/account');
+                router.push('/account')
               } else {
-                router.push('/login');
+                router.push('/login')
               }
             }}
           >
@@ -49,9 +49,9 @@ const HeaderComponent = () => {
           <span
             onClick={() => {
               if (userContext.user) {
-                router.push('/order');
+                router.push('/order')
               } else {
-                router.push('/login');
+                router.push('/login')
               }
             }}
           >
@@ -60,7 +60,7 @@ const HeaderComponent = () => {
           </span>
           <span
             onClick={() => {
-              router.push('/cart');
+              router.push('/cart')
             }}
           >
             <ShoppingCartCheckoutIcon fontSize="large" color="success" />
@@ -72,7 +72,7 @@ const HeaderComponent = () => {
         </nav>
       </div>
     </StyledHeader>
-  );
-};
+  )
+}
 
-export default HeaderComponent;
+export default HeaderComponent
