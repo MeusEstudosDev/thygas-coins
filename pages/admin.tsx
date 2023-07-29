@@ -1,105 +1,105 @@
-import CreateCategoryModal from '@/components/modal/createCategory.component';
-import CreateProductModal from '@/components/modal/createProduct.component';
-import DeleteCategoryModal from '@/components/modal/deleteCategory.component';
-import DeleteProductModal from '@/components/modal/deleteProduct.component';
-import DeleteUserModal from '@/components/modal/deleteUser.component';
-import EditCategoryModal from '@/components/modal/editCategory.component';
-import EditProductModal from '@/components/modal/editProduct.component';
-import EditUserModal from '@/components/modal/editUser.component';
-import RequestEditModal from '@/components/modal/requestEditModal.component';
-import { LoadingContext } from '@/contexts/loading.context';
-import { UserContext } from '@/contexts/user.context';
-import { IProducts } from '@/interfaces/products.interfaces';
-import { IRequests } from '@/interfaces/requests.interfaces';
-import { StyledAdmin } from '@/styles/admin.styles';
-import { StyledSelect } from '@/styles/select.styles';
-import axios from 'axios';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import CreateCategoryModal from '@/components/modal/createCategory.component'
+import CreateProductModal from '@/components/modal/createProduct.component'
+import DeleteCategoryModal from '@/components/modal/deleteCategory.component'
+import DeleteProductModal from '@/components/modal/deleteProduct.component'
+import DeleteUserModal from '@/components/modal/deleteUser.component'
+import EditCategoryModal from '@/components/modal/editCategory.component'
+import EditProductModal from '@/components/modal/editProduct.component'
+import EditUserModal from '@/components/modal/editUser.component'
+import RequestEditModal from '@/components/modal/requestEditModal.component'
+import { LoadingContext } from '@/contexts/loading.context'
+import { UserContext } from '@/contexts/user.context'
+import { IProducts } from '@/interfaces/products.interfaces'
+import { IRequests } from '@/interfaces/requests.interfaces'
+import { StyledAdmin } from '@/styles/admin.styles'
+import { StyledSelect } from '@/styles/select.styles'
+import axios from 'axios'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
 const AdminPage = () => {
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const loadingContext = React.useContext(LoadingContext);
+  const loadingContext = React.useContext(LoadingContext)
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const [filterCategories, setFilterCategories] = useState('all');
+  const [filterCategories, setFilterCategories] = useState('all')
 
-  const [filter, setFilter] = useState<IProducts[]>();
+  const [filter, setFilter] = useState<IProducts[]>()
 
-  const [filterRequestsOptions, setFilterRequestsOptions] = useState('all');
+  const [filterRequestsOptions, setFilterRequestsOptions] = useState('all')
 
-  const [filterRequests, setFilterRequests] = useState<IRequests[]>();
+  const [filterRequests, setFilterRequests] = useState<IRequests[]>()
 
   React.useEffect(() => {
     if (filterRequestsOptions === 'all') {
-      return setFilterRequests(userContext.requests!);
+      return setFilterRequests(userContext.requests!)
     }
 
     const filter = userContext.requests?.filter(
       (el) => el.status === filterRequestsOptions
-    );
+    )
 
-    setFilterRequests(filter);
-  }, [filterRequestsOptions, userContext.requests]);
+    setFilterRequests(filter)
+  }, [filterRequestsOptions, userContext.requests])
 
   React.useEffect(() => {
     if (filterCategories === 'all') {
-      return setFilter(userContext.products);
+      return setFilter(userContext.products)
     }
 
     const filterProducts = userContext.products.filter(
       (el) => el.categoryId === filterCategories
-    );
+    )
 
-    setFilter(filterProducts);
+    setFilter(filterProducts)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterCategories, userContext.products]);
+  }, [filterCategories, userContext.products])
 
   React.useEffect(() => {
     if (userContext.user && !userContext.user?.isAdmin) {
-      toast.error('Você não tem permissão.');
+      toast.error('Você não tem permissão.')
 
-      router.push('/');
+      router.push('/')
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userContext.user]);
+  }, [userContext.user])
 
   React.useEffect(() => {
     if (userContext.user) {
-      loadingContext.setLoading(true);
+      loadingContext.setLoading(true)
 
       const getRequests = async () => {
         try {
-          const token = localStorage.getItem('token');
+          const token = localStorage.getItem('token')
 
-          if (!token) userContext.userLogout();
+          if (!token) userContext.userLogout()
 
           const { data } = await axios.get('/api/requests/list', {
             headers: { Authorization: 'Bearer ' + token },
-          });
+          })
 
-          console.log(data);
+          console.log(data)
 
-          userContext.setRequests(data);
+          userContext.setRequests(data)
         } catch (e: any) {
           toast.error(e.response.data.message, {
             autoClose: 5000,
             className: 'my-toast-error',
-          });
+          })
         } finally {
-          loadingContext.setLoading(false);
+          loadingContext.setLoading(false)
         }
-      };
+      }
 
-      getRequests();
+      getRequests()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userContext.user]);
+  }, [userContext.user])
 
   return (
     <>
@@ -140,8 +140,8 @@ const AdminPage = () => {
 
           <button
             onClick={(event) => {
-              event.preventDefault();
-              userContext.setModalUserEdit(true);
+              event.preventDefault()
+              userContext.setModalUserEdit(true)
             }}
           >
             Editar
@@ -153,8 +153,8 @@ const AdminPage = () => {
 
           <button
             onClick={(event) => {
-              event.preventDefault();
-              userContext.setModalCategoryCreate(true);
+              event.preventDefault()
+              userContext.setModalCategoryCreate(true)
             }}
           >
             Adicionar
@@ -170,18 +170,18 @@ const AdminPage = () => {
                 <div>
                   <button
                     onClick={(event) => {
-                      event.preventDefault();
-                      userContext.setCategoryInfo(el);
-                      userContext.setModalCategoryEdit(true);
+                      event.preventDefault()
+                      userContext.setCategoryInfo(el)
+                      userContext.setModalCategoryEdit(true)
                     }}
                   >
                     Editar
                   </button>
                   <button
                     onClick={(event) => {
-                      event.preventDefault();
-                      userContext.setCategoryInfo(el);
-                      userContext.setModalCategoryDelete(true);
+                      event.preventDefault()
+                      userContext.setCategoryInfo(el)
+                      userContext.setModalCategoryDelete(true)
                     }}
                   >
                     Deletar
@@ -197,8 +197,8 @@ const AdminPage = () => {
 
           <button
             onClick={(event) => {
-              event.preventDefault();
-              userContext.setModalProductCreate(true);
+              event.preventDefault()
+              userContext.setModalProductCreate(true)
             }}
           >
             Adicionar
@@ -245,18 +245,18 @@ const AdminPage = () => {
                 <div>
                   <button
                     onClick={(event) => {
-                      event.preventDefault();
-                      userContext.setProductInfo(el);
-                      userContext.setModalProductEdit(true);
+                      event.preventDefault()
+                      userContext.setProductInfo(el)
+                      userContext.setModalProductEdit(true)
                     }}
                   >
                     Editar
                   </button>
                   <button
                     onClick={(event) => {
-                      event.preventDefault();
-                      userContext.setProductInfo(el);
-                      userContext.setModalProductDelete(true);
+                      event.preventDefault()
+                      userContext.setProductInfo(el)
+                      userContext.setModalProductDelete(true)
                     }}
                   >
                     Deletar
@@ -342,8 +342,8 @@ const AdminPage = () => {
                 <li
                   key={el.id}
                   onClick={() => {
-                    userContext.setRequestInfo(el);
-                    userContext.setModalRequestEdit(true);
+                    userContext.setRequestInfo(el)
+                    userContext.setModalRequestEdit(true)
                   }}
                 >
                   <p
@@ -399,7 +399,7 @@ const AdminPage = () => {
         </section>
       </StyledAdmin>
     </>
-  );
-};
+  )
+}
 
-export default AdminPage;
+export default AdminPage

@@ -1,33 +1,33 @@
-import ContinueModal from '@/components/modal/continue.component';
-import { LoadingContext } from '@/contexts/loading.context';
-import { UserContext } from '@/contexts/user.context';
-import { IProductBuyReq, IProducts } from '@/interfaces/products.interfaces';
-import { StyledInput } from '@/styles/input.styles';
-import { StyledLabel } from '@/styles/label.styles';
-import { StyledProduct } from '@/styles/pageProduct.styles';
-import { yupResolver } from '@hookform/resolvers/yup';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import axios from 'axios';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import * as yup from 'yup';
+import ContinueModal from '@/components/modal/continue.component'
+import { LoadingContext } from '@/contexts/loading.context'
+import { UserContext } from '@/contexts/user.context'
+import { IProductBuyReq, IProducts } from '@/interfaces/products.interfaces'
+import { StyledInput } from '@/styles/input.styles'
+import { StyledLabel } from '@/styles/label.styles'
+import { StyledProduct } from '@/styles/pageProduct.styles'
+import { yupResolver } from '@hookform/resolvers/yup'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import axios from 'axios'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import * as yup from 'yup'
 
 const ProductPage = () => {
-  const loadingContext = React.useContext(LoadingContext);
+  const loadingContext = React.useContext(LoadingContext)
 
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const [product, setProduct] = React.useState<IProducts | null>(null);
+  const [product, setProduct] = React.useState<IProducts | null>(null)
 
-  const [count, setCount] = React.useState<number>(25);
+  const [count, setCount] = React.useState<number>(25)
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const id = router.query.id;
+  const id = router.query.id
 
   const { register, handleSubmit } = useForm<IProductBuyReq>({
     resolver: yupResolver(
@@ -36,29 +36,29 @@ const ProductPage = () => {
         count: yup.number().optional(),
       })
     ),
-  });
+  })
 
   const handle = async (data: IProductBuyReq) => {
-    loadingContext.setLoading(true);
+    loadingContext.setLoading(true)
 
     if (data.character === '') {
-      loadingContext.setLoading(false);
-      return toast.error('Este char não existe.');
+      loadingContext.setLoading(false)
+      return toast.error('Este char não existe.')
     }
 
     if (router.pathname === '/product/[id]' && data.character) {
       if (data.count === undefined || data.count <= 0) {
-        loadingContext.setLoading(false);
-        return toast.error('Você deve comprar 25 ou mais TC.');
+        loadingContext.setLoading(false)
+        return toast.error('Você deve comprar 25 ou mais TC.')
       }
 
       const res = await axios.get(
         `https://api.tibiadata.com/v3/character/${data.character}`
-      );
+      )
 
       if (!res.data.characters.character.name) {
-        loadingContext.setLoading(false);
-        return toast.error('Este char não existe.');
+        loadingContext.setLoading(false)
+        return toast.error('Este char não existe.')
       }
 
       const newProduct = {
@@ -68,18 +68,18 @@ const ProductPage = () => {
         price: Number(((product?.price! / 250) * count).toFixed(2)),
         character: data.character,
         image: product?.image!,
-      };
+      }
 
-      userContext.setCart([newProduct, ...userContext.cart]);
+      userContext.setCart([newProduct, ...userContext.cart])
 
-      userContext.setModalContinue(true);
+      userContext.setModalContinue(true)
 
-      return loadingContext.setLoading(false);
+      return loadingContext.setLoading(false)
     }
 
     for (const key in data) {
       if (data.hasOwnProperty(key) && data[key] === '') {
-        delete data[key];
+        delete data[key]
       }
     }
 
@@ -89,30 +89,30 @@ const ProductPage = () => {
       count: 1,
       price: Number(product?.price!),
       image: product?.image!,
-    };
+    }
 
-    userContext.setCart([newProduct, ...userContext.cart]);
+    userContext.setCart([newProduct, ...userContext.cart])
 
-    userContext.setModalContinue(true);
+    userContext.setModalContinue(true)
 
-    return loadingContext.setLoading(false);
-  };
+    return loadingContext.setLoading(false)
+  }
 
   React.useEffect(() => {
     if (userContext.products.length > 0 && id) {
       const getProduct = async () => {
-        const data = userContext.products.find((el) => el.id === id);
+        const data = userContext.products.find((el) => el.id === id)
 
         if (data) {
-          setProduct(data);
+          setProduct(data)
         } else {
-          router.push('/');
+          router.push('/')
         }
-      };
+      }
 
-      getProduct();
+      getProduct()
     }
-  }, [userContext.products, id, router]);
+  }, [userContext.products, id, router])
 
   return (
     <StyledProduct>
@@ -188,7 +188,7 @@ const ProductPage = () => {
                       fontSize="large"
                       onClick={() => {
                         if (count > 25) {
-                          setCount(Number(count - 25));
+                          setCount(Number(count - 25))
                         }
                       }}
                     />
@@ -196,7 +196,7 @@ const ProductPage = () => {
                       fontSize="large"
                       onClick={() => {
                         if (product?.stock > count) {
-                          setCount(Number(count + 25));
+                          setCount(Number(count + 25))
                         }
                       }}
                     />
@@ -215,7 +215,7 @@ const ProductPage = () => {
         </div>
       </section>
     </StyledProduct>
-  );
-};
+  )
+}
 
-export default ProductPage;
+export default ProductPage

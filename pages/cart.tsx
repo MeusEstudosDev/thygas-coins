@@ -1,40 +1,40 @@
-import { UserContext } from '@/contexts/user.context';
-import { IProducts } from '@/interfaces/products.interfaces';
-import { StyledCart } from '@/styles/pageCart.styles';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { toast } from 'react-toastify';
+import { UserContext } from '@/contexts/user.context'
+import { IProducts } from '@/interfaces/products.interfaces'
+import { StyledCart } from '@/styles/pageCart.styles'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { toast } from 'react-toastify'
 
 const CartPage = () => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const [filter, setFilter] = React.useState<IProducts[]>();
+  const [filter, setFilter] = React.useState<IProducts[]>()
 
   const handleDelete = (id: number) => {
-    const cartList = userContext.cart.filter((el) => el.id !== id);
+    const cartList = userContext.cart.filter((el) => el.id !== id)
 
-    userContext.setCart(cartList);
-  };
+    userContext.setCart(cartList)
+  }
 
   const handleFinish = async () => {
-    router.push('/payment');
-  };
+    router.push('/payment')
+  }
 
   const handlePatch = async () => {
-    toast.error('Você precisa estar logado.');
-    router.push('/login');
-  };
+    toast.error('Você precisa estar logado.')
+    router.push('/login')
+  }
 
   React.useEffect(() => {
-    const list = userContext.products.filter((el) => el.stock > 0);
+    const list = userContext.products.filter((el) => el.stock > 0)
 
-    setFilter(list);
+    setFilter(list)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userContext.products]);
+  }, [userContext.products])
 
   return (
     <StyledCart>
@@ -76,7 +76,7 @@ const CartPage = () => {
                 <strong>Total: </strong>
                 {userContext.cart
                   .reduce((a, b) => {
-                    return a + b.price;
+                    return a + b.price
                   }, 0)
                   .toLocaleString('pt-BR', {
                     style: 'currency',
@@ -87,9 +87,9 @@ const CartPage = () => {
               <button
                 onClick={() => {
                   if (userContext.user) {
-                    handleFinish();
+                    handleFinish()
                   } else {
-                    handlePatch();
+                    handlePatch()
                   }
                 }}
               >
@@ -106,8 +106,8 @@ const CartPage = () => {
                   <li
                     key={el.id}
                     onClick={() => {
-                      userContext.setFilterCategories(el.id);
-                      router.push('/');
+                      userContext.setFilterCategories(el.id)
+                      router.push('/')
                     }}
                   >
                     <Image
@@ -124,7 +124,7 @@ const CartPage = () => {
         )}
       </section>
     </StyledCart>
-  );
-};
+  )
+}
 
-export default CartPage;
+export default CartPage

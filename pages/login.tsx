@@ -1,29 +1,29 @@
-import RecoveryModal from '@/components/modal/recoveryUser.component';
-import { LoadingContext } from '@/contexts/loading.context';
-import { UserContext } from '@/contexts/user.context';
-import { ILogin } from '@/interfaces/session.interfaces';
-import { StyledFormError } from '@/styles/formError.styles';
-import { StyledInput } from '@/styles/input.styles';
-import { StyledLabel } from '@/styles/label.styles';
-import { StyledRecovery, StyledSession } from '@/styles/session.styles';
-import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import * as yup from 'yup';
+import RecoveryModal from '@/components/modal/recoveryUser.component'
+import { LoadingContext } from '@/contexts/loading.context'
+import { UserContext } from '@/contexts/user.context'
+import { ILogin } from '@/interfaces/session.interfaces'
+import { StyledFormError } from '@/styles/formError.styles'
+import { StyledInput } from '@/styles/input.styles'
+import { StyledLabel } from '@/styles/label.styles'
+import { StyledRecovery, StyledSession } from '@/styles/session.styles'
+import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import * as yup from 'yup'
 
 const LoginPage = () => {
-  const loadingContext = React.useContext(LoadingContext);
+  const loadingContext = React.useContext(LoadingContext)
 
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const [visiblePassword, setVisiblePassword] = React.useState<boolean>(false);
+  const [visiblePassword, setVisiblePassword] = React.useState<boolean>(false)
 
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     register,
@@ -39,10 +39,10 @@ const LoginPage = () => {
         password: yup.string().required('senha é obrigatório.'),
       })
     ),
-  });
+  })
 
   const handle = async ({ email, password }: ILogin) => {
-    loadingContext.setLoading(true);
+    loadingContext.setLoading(true)
 
     try {
       const { data } = await toast.promise(
@@ -55,30 +55,30 @@ const LoginPage = () => {
           className: 'my-toast-sucess',
           autoClose: 5000,
         }
-      );
+      )
 
-      userContext.setUser(data.user);
+      userContext.setUser(data.user)
 
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.token)
 
-      router.back();
+      router.back()
     } catch (e: any) {
       toast.error(e.response.data.message, {
         autoClose: 5000,
         className: 'my-toast-error',
-      });
+      })
     } finally {
-      loadingContext.setLoading(false);
+      loadingContext.setLoading(false)
     }
-  };
+  }
 
   const changeVisiblePassword = (): void => {
-    visiblePassword ? setVisiblePassword(false) : setVisiblePassword(true);
-  };
+    visiblePassword ? setVisiblePassword(false) : setVisiblePassword(true)
+  }
 
   React.useEffect(() => {
-    if (userContext.user) router.push('/');
-  }, [router, userContext.user]);
+    if (userContext.user) router.push('/')
+  }, [router, userContext.user])
 
   return (
     <>
@@ -128,7 +128,7 @@ const LoginPage = () => {
 
           <StyledRecovery
             onClick={() => {
-              userContext.setModalUserRecovery(true);
+              userContext.setModalUserRecovery(true)
             }}
           >
             Esqueceu sua senha?
@@ -142,7 +142,7 @@ const LoginPage = () => {
         </form>
       </StyledSession>
     </>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

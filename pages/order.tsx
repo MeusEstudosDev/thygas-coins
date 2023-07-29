@@ -1,51 +1,51 @@
-import RequestModal from '@/components/modal/requestModal.component';
-import { LoadingContext } from '@/contexts/loading.context';
-import { UserContext } from '@/contexts/user.context';
-import { IRequests } from '@/interfaces/requests.interfaces';
-import { StyledOrder } from '@/styles/pageOrder.styles';
-import axios from 'axios';
-import React from 'react';
-import { toast } from 'react-toastify';
+import RequestModal from '@/components/modal/requestModal.component'
+import { LoadingContext } from '@/contexts/loading.context'
+import { UserContext } from '@/contexts/user.context'
+import { IRequests } from '@/interfaces/requests.interfaces'
+import { StyledOrder } from '@/styles/pageOrder.styles'
+import axios from 'axios'
+import React from 'react'
+import { toast } from 'react-toastify'
 
 const OrderPage = () => {
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const loadingContext = React.useContext(LoadingContext);
+  const loadingContext = React.useContext(LoadingContext)
 
   const handleModal = async (data: IRequests) => {
-    userContext.setRequestInfo(data);
-    userContext.setModalRequest(true);
-  };
+    userContext.setRequestInfo(data)
+    userContext.setModalRequest(true)
+  }
 
   React.useEffect(() => {
     if (userContext.user && !userContext.requests) {
-      loadingContext.setLoading(true);
+      loadingContext.setLoading(true)
 
       const getRequests = async () => {
         try {
-          const token = localStorage.getItem('token');
+          const token = localStorage.getItem('token')
 
-          if (!token) userContext.userLogout();
+          if (!token) userContext.userLogout()
 
           const { data } = await axios.get('/api/requests/list', {
             headers: { Authorization: 'Bearer ' + token },
-          });
+          })
 
-          userContext.setRequests(data);
+          userContext.setRequests(data)
         } catch (e: any) {
           toast.error(e.response.data.message, {
             autoClose: 5000,
             className: 'my-toast-error',
-          });
+          })
         } finally {
-          loadingContext.setLoading(false);
+          loadingContext.setLoading(false)
         }
-      };
+      }
 
-      getRequests();
+      getRequests()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userContext.user]);
+  }, [userContext.user])
 
   return (
     <StyledOrder>
@@ -160,7 +160,7 @@ const OrderPage = () => {
         </ul>
       </section>
     </StyledOrder>
-  );
-};
+  )
+}
 
-export default OrderPage;
+export default OrderPage

@@ -1,11 +1,11 @@
-import DeleteUserModal from '@/components/modal/deleteUser.component';
-import EditUserModal from '@/components/modal/editUser.component';
-import { UserContext } from '@/contexts/user.context';
-import { StyledAccount, StyledExcluir } from '@/styles/account.styles';
-import React from 'react';
+import DeleteUserModal from '@/components/modal/deleteUser.component'
+import EditUserModal from '@/components/modal/editUser.component'
+import { UserContext } from '@/contexts/user.context'
+import { StyledAccount, StyledExcluir } from '@/styles/account.styles'
+import React from 'react'
 
 const AccountPage = () => {
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
   return (
     <>
@@ -36,8 +36,8 @@ const AccountPage = () => {
 
           <button
             onClick={(event) => {
-              event.preventDefault();
-              userContext.setModalUserEdit(true);
+              event.preventDefault()
+              userContext.setModalUserEdit(true)
             }}
           >
             Editar
@@ -46,8 +46,8 @@ const AccountPage = () => {
           <div>
             <StyledExcluir
               onClick={(event) => {
-                event.preventDefault();
-                userContext.setModalUserDelete(true);
+                event.preventDefault()
+                userContext.setModalUserDelete(true)
               }}
             >
               Excluir minha conta<span></span>
@@ -56,7 +56,7 @@ const AccountPage = () => {
         </section>
       </StyledAccount>
     </>
-  );
-};
+  )
+}
 
-export default AccountPage;
+export default AccountPage

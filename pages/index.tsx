@@ -1,24 +1,26 @@
-import { UserContext } from '@/contexts/user.context';
-import { IProducts } from '@/interfaces/products.interfaces';
-import { StyledHome } from '@/styles/home.styles';
-import { StyledSelect } from '@/styles/select.styles';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React from 'react';
+import { UserContext } from '@/contexts/user.context'
+import { IProducts } from '@/interfaces/products.interfaces'
+import { StyledHome } from '@/styles/home.styles'
+import { StyledSelect } from '@/styles/select.styles'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import React from 'react'
 
 const HomePage = () => {
-  const userContext = React.useContext(UserContext);
+  const userContext = React.useContext(UserContext)
 
-  const router = useRouter();
+  const router = useRouter()
 
-
-  const [filter, setFilter] = React.useState<IProducts[]>();
+  const [filter, setFilter] = React.useState<IProducts[]>()
 
   React.useEffect(() => {
-    const list = userContext.products.filter((el) => el.stock > 0);
+    const list = userContext.products.filter((el) => el.stock > 0)
 
-    if (userContext.filterCategories === 'all' && userContext.homeSearch === '') {
-      return setFilter(list);
+    if (
+      userContext.filterCategories === 'all' &&
+      userContext.homeSearch === ''
+    ) {
+      return setFilter(list)
     }
 
     const filterProducts = list.filter((el) => {
@@ -26,7 +28,7 @@ const HomePage = () => {
         if (
           el.name.toLowerCase().includes(userContext.homeSearch.toLowerCase())
         ) {
-          return el;
+          return el
         } else if (
           userContext.categories.some(
             (elem) =>
@@ -36,16 +38,20 @@ const HomePage = () => {
                 .includes(userContext.homeSearch.toLowerCase())
           )
         ) {
-          return el;
+          return el
         }
       } else {
-        if (el.categoryId === userContext.filterCategories) return el;
+        if (el.categoryId === userContext.filterCategories) return el
       }
-    });
+    })
 
-    setFilter(filterProducts);
+    setFilter(filterProducts)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userContext.products, userContext.filterCategories, userContext.homeSearch]);
+  }, [
+    userContext.products,
+    userContext.filterCategories,
+    userContext.homeSearch,
+  ])
 
   return (
     <StyledHome>
@@ -67,8 +73,8 @@ const HomePage = () => {
         <div>
           <button
             onClick={() => {
-              userContext.setFilterCategories('all');
-              userContext.setHomeSearch('');
+              userContext.setFilterCategories('all')
+              userContext.setHomeSearch('')
             }}
           >
             Todas categorias
@@ -79,7 +85,10 @@ const HomePage = () => {
       <ul>
         {userContext.filterCategories === 'all' && userContext.homeSearch === ''
           ? userContext.categories.map((el) => (
-              <li key={el.id} onClick={() => userContext.setFilterCategories(el.id)}>
+              <li
+                key={el.id}
+                onClick={() => userContext.setFilterCategories(el.id)}
+              >
                 <Image src={el.image} alt={el.name} width={180} height={180} />
               </li>
             ))
@@ -87,7 +96,7 @@ const HomePage = () => {
               <li
                 key={el.id}
                 onClick={() => {
-                  router.push(`/product/${el.id}`);
+                  router.push(`/product/${el.id}`)
                 }}
               >
                 <h2>{el.name}</h2>
@@ -102,7 +111,7 @@ const HomePage = () => {
             ))}
       </ul>
     </StyledHome>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
