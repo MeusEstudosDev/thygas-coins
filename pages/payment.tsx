@@ -1,3 +1,4 @@
+import ConfirmPaymentModal from '@/components/modal/confirmPayment.component'
 import { LoadingContext } from '@/contexts/loading.context'
 import { UserContext } from '@/contexts/user.context'
 import { StyledPayment } from '@/styles/pagePayment.styles'
@@ -97,6 +98,8 @@ const PaymentPage = () => {
 
   return (
     <StyledPayment>
+      {userContext.modalContinue && <ConfirmPaymentModal />}
+
       <section>
         <h3>
           Para finalizar a compra faça o pagamento de{' '}
@@ -141,16 +144,12 @@ const PaymentPage = () => {
           </p>
 
           <p>
-            Se o nome estiver errado por favor altere antes de confirmar o
-            pagamento.
-          </p>
-
-          <p>
             Para agilizar informe o código{' '}
             <strong>{userContext.randomCode}</strong> na descrição do pagamento.
           </p>
 
-          <button onClick={() => handleFinish()}>Confirmar pagamento</button>
+          <button onClick={() => userContext.setModalContinue(true)}>Confirmar pagamento</button>
+          {/* <button onClick={() => handleFinish()}>Confirmar pagamento</button> */}
         </div>
 
         <ul>

@@ -64,8 +64,8 @@ const ProductPage = () => {
       const newProduct = {
         id: userContext.cart.length,
         name: product?.name!,
-        count: Number(count),
-        price: Number(((product?.price! / 250) * count).toFixed(2)),
+        count: Number(data.count),
+        price: Number(((product?.price! / 250) * data.count).toFixed(2)),
         character: data.character,
         image: product?.image!,
       }

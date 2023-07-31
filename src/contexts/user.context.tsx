@@ -74,6 +74,9 @@ interface IUserContext {
   modalContinue: boolean
   setModalContinue: React.Dispatch<React.SetStateAction<boolean>>
 
+  modalConfirmPayment: boolean
+  setModalConfirmPayment: React.Dispatch<React.SetStateAction<boolean>>
+
   filterCategories: string
   setFilterCategories: React.Dispatch<React.SetStateAction<string>>
 
@@ -148,6 +151,9 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
   const [modalRequestEdit, setModalRequestEdit] = React.useState<boolean>(false)
 
   const [modalContinue, setModalContinue] = React.useState<boolean>(false)
+
+  const [modalConfirmPayment, setModalConfirmPayment] =
+    React.useState<boolean>(false)
 
   const [filterCategories, setFilterCategories] = React.useState<string>('all')
 
@@ -260,6 +266,8 @@ const UserProvider = ({ children }: IContextProps): JSX.Element => {
         setModalRequestEdit,
         modalContinue,
         setModalContinue,
+        modalConfirmPayment,
+        setModalConfirmPayment,
         filterCategories,
         setFilterCategories,
         randomCode,
